@@ -19,5 +19,6 @@
 		    </manifest>
 		</jar>
 		<signjar jar="build/dist/mudiiclient.jar" alias="mudiiclient" storepass="client" keystore="keystore"/>
-	</target>	
+		<!-- RABAT5SSLMD https://en.sklep.unizeto.pl/data-safety/code-signing-certificates.html -->
+	</target>
 </project>

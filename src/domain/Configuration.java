@@ -89,4 +89,10 @@ public class Configuration {
 	public void setInt(String key, int value) {
 		setSetting(key, Integer.toString(value));
 	}
+
+	public Properties getSettings() {
+		checkProperties();
+
+		return properties;
+	}
 }

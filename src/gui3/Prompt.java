@@ -46,6 +46,8 @@ public class Prompt implements ComponentWrapper, KeyListener, FontConsumer, Play
 	private FunctionKeyStore functionKeyStore;
 	
 	private List players;
+
+	private CommandTransformer commandTransformer;
 	
 	public void init() {
 		players = new Vector();
@@ -257,7 +259,11 @@ public class Prompt implements ComponentWrapper, KeyListener, FontConsumer, Play
 	}
 
 	public void keyReleased(KeyEvent e) {
-		
+		String cmd = component.getText();
+		String transformed = commandTransformer.transform(cmd);
+		if (!cmd.equals(transformed)) {
+			component.setText(transformed);
+		}
 	}
 
 	public void setScrollbackController(ScrollbackController scrollbackController) {
@@ -308,4 +314,7 @@ public class Prompt implements ComponentWrapper, KeyListener, FontConsumer, Play
 		}
 	}
 
+	public void setCommandTransformer(CommandTransformer commandTransformer) {
+		this.commandTransformer = commandTransformer;
+	}
 }

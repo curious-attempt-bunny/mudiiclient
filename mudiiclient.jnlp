@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+"
+	codebase="http://mud2.net/mudiiclient/"
+	href="mudiiclient.jnlp">
+	<information>
+  		<title>mudiiclient</title>
+  		<vendor>mudii.co.uk</vendor>
+  		<homepage href="http://mud2.net/mudiiclient" />
+  		<description>mudii.co.uk client</description>
+  		<shortcut online="true">
+	      <desktop/>
+    	  <menu submenu="MUDII Client"/>
+	    </shortcut>	
+	</information>
+
+	<security>
+		<all-permissions />
+	</security>
+
+	<resources>
+		<j2se version="1.4+" />
+		<jar href="mudiiclient.jar" />
+	</resources>
+	
+	<application-desc main-class="gui3.Launcher" />
+</jnlp>
