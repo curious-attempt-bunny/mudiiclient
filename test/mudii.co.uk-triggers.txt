@@ -1,0 +1,4 @@
+login: = mud
+^Account ID: = Z00000111
+^Password: = merlzmerlz
+Hit return. = 

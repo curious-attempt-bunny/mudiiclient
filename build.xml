@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<project default="jar" basedir=".">
+	<target name="compile">
+		<mkdir dir="build/classes" />
+		<javac srcdir="src" destdir="build/classes" target="1.4" source="1.4"/>
+		<copy todir="build/classes">
+			<fileset dir="data" includes="**"/>
+		</copy>
+	</target>
+	
+	<target name="jar" depends="compile">
+		<mkdir dir="build/dist"/>		
+		<jar destfile="build/dist/mudiiclient.jar">
+			<fileset dir="build/classes" includes="**/*"/>
+		</jar>
+		<signjar jar="build/dist/mudiiclient.jar" alias="mudiiclient" storepass="client" keystore="keystore"/>
+	</target>	
+</project>

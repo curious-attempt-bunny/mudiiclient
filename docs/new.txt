@@ -1,0 +1,33 @@
+v1.xxx
+
+Cleaned up the login code. Now /F will be sent in all cases.
+
+v1.2.4
+
+Fix for occassional failure to correctly resize the scroll bar when you first enter the Land.
+Fixed tiny scrollback size limit introduced in v1.2.3. 
+
+v1.2.3
+
+No longer scrape stats from snooped text. This was causing confusion when someone you were snooping in a fight. Their stamina would overwrite yours on the status bar.
+Found and fixed a bug in selecting & copying text.
+Fixed the scroll bar position when you press ESC to get out of scroll-back mode.
+Cleaned up some code that was long overdue an overhaul. Should have fixed the bizarre text miscolouring problem that cropped up once in a blue moon.
+Attempted a fix for grey not showing up. Needs testing (cue the wizzes).
+
+v1.2.2
+
+Status bar will now compact down to a smaller size if the window is small
+Installers create shortcuts called "mudiiclient" not "mudiiclient-setup".
+Automated generating and uploading the installer.
+
+v1.2.1
+
+fixed bug introduced in v1.2.0: /F was no longer being sent, so word wrap was broken
+
+v1.2.0
+
+Guest login feature added.
+Disabled "Quick Keys" and recording commands to history.txt
+Updated "How to Use MUDIIClient" document
+Login process now clutters the display less (no Rest or Examine commands are sent)
