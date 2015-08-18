@@ -4,7 +4,7 @@
 
 Java is required for this program to run.
 
-1. Download the [jar](https://www.dropbox.com/s/prulrxiduyyr47u/mudiiclient.jar?dl=0).
+1. Download the [jar](http://mud2.net/mudiiclient/mudiiclient.jar).
 2. Double click the jar file to launch.
 
 If launching by double clicking does not work then you can run it from a command-line like so:
