@@ -4,14 +4,7 @@ import gui3.ColourHelper;
 import gui3.DocumentListener;
 import gui3.ViewListener;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
@@ -92,6 +85,10 @@ public class BetterTextAreaView extends JPanel implements MouseListener, MouseMo
 	}
 
 	public void paint(Graphics gc) {
+		((Graphics2D)gc).setRenderingHint(
+				RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
 		Dimension size = getSize();
 		if (isFontChanged) {
 			FontMetrics fontMetrics = gc.getFontMetrics(font);
