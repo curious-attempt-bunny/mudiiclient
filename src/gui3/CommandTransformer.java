@@ -15,12 +15,16 @@ public class CommandTransformer implements TextListener, CodeListener {
     private Configuration configuration;
 
     public CommandTransformer() {
+
+    }
+
+    public void init() {
         Properties settings = configuration.getSettings();
         Enumeration names = settings.propertyNames();
         while(names.hasMoreElements()) {
             String name = (String)names.nextElement();
             if (name.startsWith("trigger")) {
-                String[] parts = name.split("|");
+                String[] parts = name.split("\\|");
                 triggerToMacroAndValue.put(parts[1], configuration.getSetting(name));
             }
         }
@@ -30,7 +34,7 @@ public class CommandTransformer implements TextListener, CodeListener {
         String[] cmds = cmd.split("\\.", -1);
         for(int i=0; i<cmds.length; i++) {
             if (macroToValue.containsKey(cmds[i])) {
-                cmds[i] = (String) macroToValue.get(i);
+                cmds[i] = (String) macroToValue.get(cmds[i]);
                 break;
             }
         }
@@ -47,7 +51,7 @@ public class CommandTransformer implements TextListener, CodeListener {
 
             if (text.indexOf(trigger) != -1) {
                 String macroAndValue = (String) triggerToMacroAndValue.get(trigger);
-                String[] parts = macroAndValue.split("|");
+                String[] parts = macroAndValue.split("\\|");
 
                 System.out.println("Trigger fired: \"" + trigger + "\".");
                 System.out.println("Setting macro "+parts[0]+" --> "+parts[1]);

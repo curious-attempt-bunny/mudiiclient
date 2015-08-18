@@ -17,6 +17,7 @@ import io.protocol.impl.BasicMudClientModeStyle;
 import io.protocol.impl.BasicTelnetProtocolHandler;
 import io.protocol.impl.BasicTextSanitizer;
 import io.protocol.impl.BetterMudClientProtocolHandler;
+import io.sensor.MausoleumPuzzleSensor;
 import io.sensor.PlayerSensor;
 import io.sensor.Sensor;
 import io.sensor.StatsSensor;
@@ -111,7 +112,19 @@ public class Launcher {
 		Logger logger = new HtmlLogger();
 		
 		ConfigurationWindowWrapper configurationFrame = new ConfigurationWindowWrapper();
-		
+
+		CommandTransformer commandTransformer = new CommandTransformer();
+
+		commandTransformer.setConfiguration(configuration);
+		mudClientFilter.addTextListener(commandTransformer);
+		prompt.setCommandTransformer(commandTransformer);
+		commandTransformer.init();
+
+		MausoleumPuzzleSensor mausoleumPuzzleSensor = new MausoleumPuzzleSensor();
+		mausoleumPuzzleSensor.setConfiguration(configuration);
+		mausoleumPuzzleSensor.setCommandTransformer(commandTransformer);
+		mudClientFilter.addTextListener(mausoleumPuzzleSensor);
+
 		commandSender = io;
 		
 		// ------- setters
@@ -244,7 +257,7 @@ public class Launcher {
 		scrollbackController.setEnabled(false);
 		scrollbackController.setScrollback(scrollback);
 		scrollbackController.setScrollbarWrapper(scrollbarWrapper);
-		
+
 //		prompt.setParent(southPanel);
 		//prompt.setCommandSender(io);
 		prompt.setCommandSender(uiCommandSender);

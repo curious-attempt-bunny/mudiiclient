@@ -20,8 +20,11 @@ public class HtmlLogger implements Logger, Runnable {
 	private Style style;
 	private char[] colourNames;
 	private List appends;
-	
+	private boolean debug;
+
 	public void init() {
+		debug = System.getProperty("DEBUG", "false").equals("true");
+
 		appends = new ArrayList();
 		colourNames = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p' };
 		
@@ -58,6 +61,9 @@ public class HtmlLogger implements Logger, Runnable {
 	}
 
 	public void onText(String text) {
+		if (debug) {
+			System.out.print(text);
+		}
 		String[] lines = text.split("\r");
 		for (int i=0; i<lines.length; i++) {
 			if (i!=0) {
