@@ -1,0 +1,16 @@
+Prioritized:
+* fix triggers
+  "not all the tombs opening seem to cause the trigger to be created in the config.txt - tonight the dog=11 one was up - but the trigger entry was never created."
+* merge in work to make log files smaller
+* implement snoop split screens
+* use full display width for the status bar (right align some elements?)
+* highlight critical stamina, and magic
+
+Unprioritized:
+* support mouse and trackpad scrolling
+* double click to select a word for copying to the clipboard -- auto-copy?
+* add bonus str dex sta to status bar
+* assume stamina and magic gains when asleep, and in the tea room
+* show when disconnected
+* allow a way to reconnect
+* auto-play on connection
