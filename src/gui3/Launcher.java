@@ -40,7 +40,7 @@ import domain.State;
 
 
 public class Launcher {
-	public static final String VERSION = "v1.2.4";
+	public static final String VERSION = "v1.3.0 beta";
 	
 	private LoginWindowLayout loginWindowLayout;
 	private MainWindowWrapper mainFrame;
