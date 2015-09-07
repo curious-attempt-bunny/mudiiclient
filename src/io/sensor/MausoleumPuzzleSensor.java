@@ -4,8 +4,6 @@ import domain.Configuration;
 import gui3.CommandTransformer;
 import io.element.ElementHandler;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -23,7 +21,7 @@ public class MausoleumPuzzleSensor implements ElementHandler {
     private Map mapDirToToken;
     private Map mapDirToTrigger;
     private CommandTransformer commandTransformer;
-    private ElementDetector elementDetector;
+    private LineDetector lineDetector;
 
     public MausoleumPuzzleSensor() {
         openPattern = Pattern.compile("You hear a.*, as the entrance to the ([a-z]+) tomb swings aside.");
@@ -39,7 +37,7 @@ public class MausoleumPuzzleSensor implements ElementHandler {
     }
 
     public void init() {
-        elementDetector.addPatternMatcherAndHandler("Written on the %d tomb is: \"%s\"", this);
+        lineDetector.addPatternMatcherAndHandler("Written on the %d tomb is: \"%s\"", this);
     }
 
     public void processElement(String element, String[] parts) {
@@ -80,8 +78,8 @@ public class MausoleumPuzzleSensor implements ElementHandler {
         this.commandTransformer = commandTransformer;
     }
 
-    public void setElementDetector(ElementDetector elementDetector) {
-        this.elementDetector = elementDetector;
+    public void setLineDetector(LineDetector lineDetector) {
+        this.lineDetector = lineDetector;
     }
 
 }

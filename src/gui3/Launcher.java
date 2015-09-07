@@ -72,7 +72,7 @@ public class Launcher {
 		ScrollbarWrapper scrollbarWrapper = new ScrollbarWrapper();
 		ScrollbackController scrollbackController = new ScrollbackController();
 		loginWrapper = new LoginWrapper();
-		ElementDetector elementDetector = new ElementDetector();
+		LineDetector lineDetector = new LineDetector();
 
 		ColourHelper colourHelper = new ConfigurableColourHelper( new DefaultColourHelper() );
 		FocusRetargetter focusRetargetter0 = new FocusRetargetter();
@@ -121,7 +121,7 @@ public class Launcher {
 		MausoleumPuzzleSensor mausoleumPuzzleSensor = new MausoleumPuzzleSensor();
 		mausoleumPuzzleSensor.setConfiguration(configuration);
 		mausoleumPuzzleSensor.setCommandTransformer(commandTransformer);
-		mausoleumPuzzleSensor.setElementDetector(elementDetector);
+		mausoleumPuzzleSensor.setLineDetector(lineDetector);
 //		mudClientFilter.addTextListener(mausoleumPuzzleSensor);
 
 		commandSender = io;
@@ -298,9 +298,9 @@ public class Launcher {
 		
 		fontManager.setConfiguration(configuration);
 
-		statsSensor.addStateListener(elementDetector);
-		mudClientFilter.addCodeListener(elementDetector);
-		mudClientFilter.addTextListener(elementDetector);
+		statsSensor.addStateListener(lineDetector);
+		mudClientFilter.addCodeListener(lineDetector);
+		mudClientFilter.addTextListener(lineDetector);
 
 		// ------- initialisers
 
