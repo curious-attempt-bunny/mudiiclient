@@ -17,10 +17,7 @@ import io.protocol.impl.BasicMudClientModeStyle;
 import io.protocol.impl.BasicTelnetProtocolHandler;
 import io.protocol.impl.BasicTextSanitizer;
 import io.protocol.impl.BetterMudClientProtocolHandler;
-import io.sensor.MausoleumPuzzleSensor;
-import io.sensor.PlayerSensor;
-import io.sensor.Sensor;
-import io.sensor.StatsSensor;
+import io.sensor.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -75,7 +72,8 @@ public class Launcher {
 		ScrollbarWrapper scrollbarWrapper = new ScrollbarWrapper();
 		ScrollbackController scrollbackController = new ScrollbackController();
 		loginWrapper = new LoginWrapper();
-		
+		ElementDetector elementDetector = new ElementDetector();
+
 		ColourHelper colourHelper = new ConfigurableColourHelper( new DefaultColourHelper() );
 		FocusRetargetter focusRetargetter0 = new FocusRetargetter();
 		FocusRetargetter focusRetargetter1 = new FocusRetargetter();
@@ -298,7 +296,11 @@ public class Launcher {
 		fontManager.addFontConsumer(mainFrame); // order is important here
 		
 		fontManager.setConfiguration(configuration);
-				
+
+		statsSensor.addStateListener(elementDetector);
+		mudClientFilter.addCodeListener(elementDetector);
+		mudClientFilter.addTextListener(elementDetector);
+
 		// ------- initialisers
 
 		mainFrame.init();

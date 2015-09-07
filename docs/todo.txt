@@ -1,6 +1,13 @@
 Prioritized:
 * fix triggers
   "not all the tombs opening seem to cause the trigger to be created in the config.txt - tonight the dog=11 one was up - but the trigger entry was never created."
+
+  x Wire in ElementDetector
+  - Move logic for initialization from CommandTranslator to ElementDetector
+  - Implement specialized PatternMatcher for assigning expansion macros
+  - Add fireOnElement
+  - Modify MausoleumPuzzleSolver to use ElementListener
+
 * merge in work to make log files smaller
 * implement snoop split screens
 * use full display width for the status bar (right align some elements?)
