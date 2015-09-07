@@ -2,16 +2,20 @@ package io.sensor;
 
 import domain.Configuration;
 import gui3.CommandTransformer;
+import io.element.ElementHandler;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 /**
  * Created by merlyn on 8/18/15.
  */
-public class MausoleumPuzzleSensor implements SensorStrategy {
+public class MausoleumPuzzleSensor implements ElementHandler {
     private final Pattern openPattern;
     private final Pattern writtenPattern;
     private String previousText = null;
@@ -19,6 +23,7 @@ public class MausoleumPuzzleSensor implements SensorStrategy {
     private Map mapDirToToken;
     private Map mapDirToTrigger;
     private CommandTransformer commandTransformer;
+    private ElementDetector elementDetector;
 
     public MausoleumPuzzleSensor() {
         openPattern = Pattern.compile("You hear a.*, as the entrance to the ([a-z]+) tomb swings aside.");
@@ -31,6 +36,14 @@ public class MausoleumPuzzleSensor implements SensorStrategy {
         mapDirToToken.put("southwest", "sw");
         mapDirToToken.put("west", "w ");
         mapDirToTrigger = new HashMap();
+    }
+
+    public void init() {
+        elementDetector.addPatternMatcherAndHandler("Written on the %d tomb is: \"%s\"", this);
+    }
+
+    public void processElement(String element, String[] parts) {
+        System.err.println(element+": "+parts[0]+", "+parts[1]);
     }
 
     public void onText(String text) {
@@ -66,4 +79,9 @@ public class MausoleumPuzzleSensor implements SensorStrategy {
     public void setCommandTransformer(CommandTransformer commandTransformer) {
         this.commandTransformer = commandTransformer;
     }
+
+    public void setElementDetector(ElementDetector elementDetector) {
+        this.elementDetector = elementDetector;
+    }
+
 }

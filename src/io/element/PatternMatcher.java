@@ -11,23 +11,27 @@ public class PatternMatcher implements ElementMatcher {
 	private final String pat;
 
 	public PatternMatcher(String pattern) {
-		String pat = pattern.replace(".", "\\.").replace("%o",
-				"([A-Za-z0-9\\-,' ]*)").replace("%d", "([a-z]*)").replace("%h",
-				"(?:hits|misses)").replace("%g", "(?:his|her|its)").replace(
-				"%t", "(?:[Tt]he )?([A-Za-z0-9\\-,' ]*)").replace("%a",
-				"(?:[Aa](?:n)? )([A-Za-z0-9\\-,' ]*)").replace("%W",
-				"([A-Za-z- ]*)");
+		String pat = pattern.replace(".", "\\.")
+				.replace("%o", "([A-Za-z0-9\\-,' ]*)")
+				.replace("%d", "([a-z]*)")
+				.replace("%h", "(?:hits|misses)")
+				.replace("%g", "(?:his|her|its)")
+				.replace("%t", "(?:[Tt]he )?([A-Za-z0-9\\-,' ]*)")
+				.replace("%a", "(?:[Aa](?:n)? )([A-Za-z0-9\\-,' ]*)")
+				.replace("%W", "([A-Za-z- ]*)")
+				.replace("%s", "([^\"]*)");
 		this.pat = pat;
-		this.pattern = Pattern.compile(pat);
+		this.pattern = Pattern.compile("(?ms).*"+pat+".*");
 		matcher = this.pattern.matcher("");
 	}
 
 	public boolean isMatch(String element) {
+		System.err.println("Considering: "+pat+" for "+element);
 		matcher.reset(element);
 		boolean found = matcher.lookingAt();
 		if (found) {
 			parts = new String[matcher.groupCount()];
-			// System.err.println("MATCHED : " + element);
+			 System.err.println("MATCHED : " + element);
 			for (int i = 1; i <= matcher.groupCount(); i++) {
 				parts[i - 1] = matcher.group(i);
 				// System.err.println("PARAM " + i + " : " + matcher.group(i));

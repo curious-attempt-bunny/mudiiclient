@@ -121,7 +121,8 @@ public class Launcher {
 		MausoleumPuzzleSensor mausoleumPuzzleSensor = new MausoleumPuzzleSensor();
 		mausoleumPuzzleSensor.setConfiguration(configuration);
 		mausoleumPuzzleSensor.setCommandTransformer(commandTransformer);
-		mudClientFilter.addTextListener(mausoleumPuzzleSensor);
+		mausoleumPuzzleSensor.setElementDetector(elementDetector);
+//		mudClientFilter.addTextListener(mausoleumPuzzleSensor);
 
 		commandSender = io;
 		
@@ -342,7 +343,8 @@ public class Launcher {
 		if (isCommandHistoryEnabled) {
 			commandHistory.init();
 		}
-		
+
+		mausoleumPuzzleSensor.init();
 	}
 	
 	public void run() {

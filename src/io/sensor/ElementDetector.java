@@ -17,6 +17,7 @@ public class ElementDetector implements Sensor, StateListener {
     private final StringBuffer text;
     private final Map mapMatcherToHandler;
     private boolean playing;
+    private boolean leading01 = false;
 
     public ElementDetector() {
         mapMatcherToHandler = new HashMap();
@@ -27,6 +28,7 @@ public class ElementDetector implements Sensor, StateListener {
     }
 
     public void onCode(String code) {
+//        System.err.println(code + " " + playing);
         if (playing) {
             if (text.length() > 0) {
                 if (buf.length() == 0) {
@@ -49,26 +51,40 @@ public class ElementDetector implements Sensor, StateListener {
             }
             if (code.equals("<>")) {
                 nesting--;
+            } else if (code.equals("<01>")) {
+                leading01 = true; // eat erroneously sent <01> codes (maybe as a result of FES statements?)
+                if (nesting == 0 && buf.length() > 0) {
+                    addElement(buf.toString());
+                    buf.delete(0, buf.length());
+                }
             } else {
+                if (leading01 && code.startsWith("<01")) {
+                    nesting++;
+                }
                 nesting++;
+                leading01 = false;
             }
 //            addElement(code);
+            addElement("");
         }
     }
 
     public void onText(String text) {
+//        System.err.println(text);
         if (playing) {
             this.text.append(text);
         }
+        leading01 = false;
     }
 
     private void addElement(String element) {
-        if (element.length() > 0) {
+//        if (element.length() > 0) {
             buf.append(element);
             // System.out.println("EL[" + nesting + "]: " + element);
             boolean isNewline = element.contains("\r")
                     && (element.indexOf('\r') == 0 || element.charAt(element
                     .indexOf('\r') - 1) != ',');
+//            System.err.println("Build up (nesting "+nesting+"): "+buf.toString());
             if ((nesting == 0 && (!isRequireNewline || isNewline))
                     || nesting < 0) {
                 String str = buf.toString();
@@ -80,11 +96,11 @@ public class ElementDetector implements Sensor, StateListener {
                 nesting = 0;
                 buf.delete(0, buf.length());
             }
-        }
+//        }
     }
 
     private void onElement(String str) {
-        System.out.println("*** " + str + " ***");
+        System.err.println("*** " + str + " ***");
         Iterator iterator = mapMatcherToHandler.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry) iterator.next();
@@ -110,10 +126,11 @@ public class ElementDetector implements Sensor, StateListener {
 
     public void onState(String key, Object value) {
         if (key.equals(State.KEY_PLAYING)) {
-            playing = Boolean.TRUE.equals(value);
-            if (playing) {
-                onCode("<2000>");
+            if (Boolean.TRUE.equals(value) && !playing) {
+                onCode("<2001>");
+                onCode("<0201>");
             }
+            playing = Boolean.TRUE.equals(value);
         }
     }
 
