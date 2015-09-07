@@ -13,19 +13,15 @@ import java.util.regex.Pattern;
 /**
  * Created by merlyn on 8/18/15.
  */
-public class MausoleumPuzzleSensor implements ElementHandler {
-    private final Pattern openPattern;
-    private final Pattern writtenPattern;
-    private String previousText = null;
+public class MausoleumPuzzleSensor {
     private Configuration configuration;
     private Map mapDirToToken;
     private Map mapDirToTrigger;
     private CommandTransformer commandTransformer;
     private LineDetector lineDetector;
+    private String lastCommand;
 
     public MausoleumPuzzleSensor() {
-        openPattern = Pattern.compile("You hear a.*, as the entrance to the ([a-z]+) tomb swings aside.");
-        writtenPattern = Pattern.compile(".*Written on the ([a-z]+) tomb is: \"");
         mapDirToToken = new HashMap();
         mapDirToToken.put("north", "n ");
         mapDirToToken.put("east", "e ");
@@ -37,37 +33,31 @@ public class MausoleumPuzzleSensor implements ElementHandler {
     }
 
     public void init() {
-        lineDetector.addPatternMatcherAndHandler("Written on the %d tomb is: \"%s\"", this);
-    }
-
-    public void processElement(String element, String[] parts) {
-        System.err.println(element+": "+parts[0]+", "+parts[1]);
-    }
-
-    public void onText(String text) {
-        String trimmed = text.trim();
-        Matcher matcher = openPattern.matcher(trimmed);
-        if (matcher.matches()) {
-            String token = (String) mapDirToToken.get(matcher.group(1));
-            System.err.println(matcher.group(1) + " & " + previousText + " & "+token);
-            if (token != null && mapDirToTrigger.containsKey(token)) {
-                configuration.setSetting("trigger|"+mapDirToTrigger.get(token), "op "+token+"|"+previousText);
-                commandTransformer.init();
-            }
-            return;
-        }
-        if (text.endsWith("?")) {
-            matcher = writtenPattern.matcher(previousText);
-            if (matcher.matches()) {
-                String token = (String) mapDirToToken.get(matcher.group(1));
-                System.err.println(matcher.group(1) + " & " + trimmed + " & " + token);
+        lineDetector.addPatternMatcherAndHandler("Written on the %d tomb is: \"%s\"", new ElementHandler() {
+            public void processElement(String element, String[] parts) {
+                String token = (String) mapDirToToken.get(parts[0]);
+                System.out.println(token + " -> "+parts[1]);
                 if (token != null) {
-                    mapDirToTrigger.put(token,trimmed);
+                    mapDirToTrigger.put(token, parts[1]);
                 }
-                return;
             }
-        }
-        previousText = trimmed;
+        });
+        lineDetector.addPatternMatcherAndHandler("\\*(.*?)(?:\\r|\\n)", new ElementHandler() {
+            public void processElement(String element, String[] parts) {
+                lastCommand = parts[0];
+                System.out.println("CMD: "+lastCommand);
+            }
+        });
+        lineDetector.addPatternMatcherAndHandler("You hear a%W, as the entrance to the %d tomb swings aside.", new ElementHandler() {
+            public void processElement(String element, String[] parts) {
+                String token = (String) mapDirToToken.get(parts[1]);
+                if (token != null && mapDirToTrigger.get(token) != null && lastCommand != null) {
+                    System.out.println("opened " + parts[1] + " with " + lastCommand);
+                    configuration.setSetting("trigger|" + mapDirToTrigger.get(token), "op " + token + "|" + lastCommand);
+                    commandTransformer.init();
+                }
+            }
+        });
     }
 
     public void setConfiguration(Configuration configuration) {

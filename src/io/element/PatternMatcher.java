@@ -11,14 +11,13 @@ public class PatternMatcher implements ElementMatcher {
 	private final String pat;
 
 	public PatternMatcher(String pattern) {
-		String pat = pattern.replace(".", "\\.")
-				.replace("%o", "([A-Za-z0-9\\-,' ]*)")
+		String pat = pattern.replace("%o", "([A-Za-z0-9\\-,' ]*)")
 				.replace("%d", "([a-z]*)")
 				.replace("%h", "(?:hits|misses)")
 				.replace("%g", "(?:his|her|its)")
 				.replace("%t", "(?:[Tt]he )?([A-Za-z0-9\\-,' ]*)")
 				.replace("%a", "(?:[Aa](?:n)? )([A-Za-z0-9\\-,' ]*)")
-				.replace("%W", "([A-Za-z- ]*)")
+				.replace("%W", "([A-Za-z-|\\/{}()<>^ ]*)")
 				.replace("%s", "([^\"]*)");
 		this.pat = pat;
 		this.pattern = Pattern.compile("(?ms).*"+pat+".*");
@@ -26,7 +25,7 @@ public class PatternMatcher implements ElementMatcher {
 	}
 
 	public boolean isMatch(String element) {
-		System.err.println("Considering: "+pat+" for "+element);
+//		System.err.println("Considering: "+pat+" for "+element);
 		matcher.reset(element);
 		boolean found = matcher.lookingAt();
 		if (found) {
