@@ -36,7 +36,7 @@ public class MausoleumPuzzleSensor {
         lineDetector.addPatternMatcherAndHandler("Written on the %d tomb is: \"%s\"", new ElementHandler() {
             public void processElement(String element, String[] parts) {
                 String token = (String) mapDirToToken.get(parts[0]);
-                System.out.println(token + " -> "+parts[1]);
+//                System.out.println(token + " -> "+parts[1]);
                 if (token != null) {
                     mapDirToTrigger.put(token, parts[1]);
                 }
@@ -45,14 +45,14 @@ public class MausoleumPuzzleSensor {
         lineDetector.addPatternMatcherAndHandler("\\*(.*?)(?:\\r|\\n)", new ElementHandler() {
             public void processElement(String element, String[] parts) {
                 lastCommand = parts[0];
-                System.out.println("CMD: "+lastCommand);
+//                System.out.println("CMD: "+lastCommand);
             }
         });
         lineDetector.addPatternMatcherAndHandler("You hear a%W, as the entrance to the %d tomb swings aside.", new ElementHandler() {
             public void processElement(String element, String[] parts) {
                 String token = (String) mapDirToToken.get(parts[1]);
                 if (token != null && mapDirToTrigger.get(token) != null && lastCommand != null) {
-                    System.out.println("opened " + parts[1] + " with " + lastCommand);
+//                    System.out.println("opened " + parts[1] + " with " + lastCommand);
                     configuration.setSetting("trigger|" + mapDirToTrigger.get(token), "op " + token + "|" + lastCommand);
                     commandTransformer.init();
                 }

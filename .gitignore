@@ -1,4 +1,4 @@
 build
 *.html
-config.txt
+config.txt*
 out

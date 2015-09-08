@@ -1,8 +1,11 @@
+v1.4.0
+
+Log files are now substantially smaller because the HTML style-sheets are now online.
+
 v1.3.0
 
 Added triggers to set macros for expansion as well as harvesting mausoleum answers from play (e.g. "op se" expands to "op 'answer")
 Added anti-aliased fonts and system true type font support. No more ugly letters!
-Log files are now substantially smaller because the HTML style-sheets are now online.
 Cleaned up the login code. Now /F will be sent in all cases.
 Removed Java WebStart support. This means a less intuitive installation. :( Code signing certificates are fiddly to obtain and require yearly admin and funds to refresh.
 

@@ -30,7 +30,7 @@ public class PatternMatcher implements ElementMatcher {
 		boolean found = matcher.lookingAt();
 		if (found) {
 			parts = new String[matcher.groupCount()];
-			System.err.println("MATCHED : " + element);
+//			System.err.println("MATCHED : " + element);
 			for (int i = 1; i <= matcher.groupCount(); i++) {
 				parts[i - 1] = matcher.group(i);
 				// System.err.println("PARAM " + i + " : " + matcher.group(i));

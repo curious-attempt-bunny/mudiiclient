@@ -54,11 +54,11 @@ public class LineDetector implements Sensor, StateListener {
             if (elementMatcher.isMatch(str)) {
 //                System.out.print("MATCH TO ");
                 String[] parts = elementMatcher.getParts();
-                for (int i =0 ; i< parts.length; i++) {
-                    String part = parts[i];
-                    System.out.print("(" + part + ") ");
-                }
-                System.out.println();
+//                for (int i =0 ; i< parts.length; i++) {
+//                    String part = parts[i];
+//                    System.out.print("(" + part + ") ");
+//                }
+//                System.out.println();
                 elementHandler.processElement(str, parts);
             }
         }
