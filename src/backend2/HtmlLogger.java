@@ -1,18 +1,18 @@
 package backend2;
 
+import domain.State;
 import gui3.ColourHelper;
 
 import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import domain.Style;
+import io.listener.StateListener;
 
-public class HtmlLogger implements Logger, Runnable {
+public class HtmlLogger implements Logger, Runnable, StateListener {
 
 	private String filename;
 	private BufferedWriter bufferedWriter;
@@ -20,39 +20,41 @@ public class HtmlLogger implements Logger, Runnable {
 	private Style style;
 	private char[] colourNames;
 	private List appends;
-	private boolean debug;
+	private String nextCode;
+	private long lastTimestamp = 0;
+	private Map state = new HashMap();;
+	private Map newState = new HashMap();;
 
 	public void init() {
-		debug = System.getProperty("DEBUG", "false").equals("true");
-
 		appends = new ArrayList();
 		colourNames = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p' };
-		
+
 		append("<html>\r");
 		append("<head>\r");
-//		append("<link rel=\"stylesheet\" href=\"colours.css\" type=\"text/css\">");
-//		append("<body bgcolor=\"#000000\"><pre><font>\r");
-		append("<style type=\"text/css\">\r");
-		for(int f=0; f<16; f++) {
-			Color fc = colourHelper.get(f);
-			for(int b=0; b<16; b++) {
-				Color bc = colourHelper.get(b);
-				append("span."+colourNames[f]+colourNames[b]);
-				append(" {\r");
-				append("  background: #");
-				append(getColorEncoding(bc.getRGB()));
-				append(" !important;\r  color: #");
-				append(getColorEncoding(fc.getRGB()));
-				append(" !important;\r}\r");
-			}
-		}
-		append("BODY {\r  font-family: monospace\r}\r");
-		append("</style>\r");
+		append("<link rel=\"stylesheet\" href=\"http://mud2.net/log/style.css\" type=\"text/css\">");
+		append("<script src=\"http://mud2.net/log/script.js\"></script>");
+
+//		append("<style type=\"text/css\">\r");
+//		for(int f=0; f<16; f++) {
+//			Color fc = colourHelper.get(f);
+//			for(int b=0; b<16; b++) {
+//				Color bc = colourHelper.get(b);
+//				append("span."+colourNames[f]+colourNames[b]);
+//				append(" {\r");
+//				append("  background: #");
+//				append(getColorEncoding(bc.getRGB()));
+//				append(" !important;\r  color: #");
+//				append(getColorEncoding(fc.getRGB()));
+//				append(" !important;\r}\r");
+//			}
+//		}
+//		append("BODY {\r  font-family: monospace\r}\r");
+//		append("</style>\r");
 		append("</head>\r");
-		append("<body bgcolor=\"#000000\">\r");
+		append("<body style=\"background-color: #000; color: #fff; font-family: monospace;\">\r");
 //		append("<PRE>\r");
 		append("<SPAN class=\""+colourNames[Style.COLOUR_LT_WHITE]+colourNames[Style.COLOUR_BLACK]+"\">\r");
-		
+
 		new Thread(this).start();
 	}
 
@@ -61,9 +63,11 @@ public class HtmlLogger implements Logger, Runnable {
 	}
 
 	public void onText(String text) {
-		if (debug) {
-			System.out.print(text);
+		text = text.replaceAll("\t", "        "); // not accurate
+		if (text.indexOf("  ") >= 0 || text.matches("\\s* .*")) {
+			text = text.replaceAll(" ", "&nbsp;");
 		}
+
 		String[] lines = text.split("\r");
 		for (int i=0; i<lines.length; i++) {
 			if (i!=0) {
@@ -77,7 +81,25 @@ public class HtmlLogger implements Logger, Runnable {
 		if (style != null) {
 			Style style2 = style;
 			style = null;
-			append("</SPAN><SPAN CLASS=\""+colourNames[style2.getForegroundColour()]+colourNames[style2.getBackgroundColour()]+"\">");
+			String codeHint = "";
+			if (nextCode != null) {
+				codeHint = " "+nextCode;
+				nextCode = null;
+
+				long now = System.currentTimeMillis();
+				if (now >= lastTimestamp + 2000) {
+					codeHint += "\" t=\""+(now/1000);
+					lastTimestamp = now;
+				}
+
+				Iterator iterator = newState.entrySet().iterator();
+				while(iterator.hasNext()) {
+					Map.Entry entry = (Map.Entry) iterator.next();
+					codeHint += "\" "+entry.getKey()+"=\""+entry.getValue();
+				}
+				newState.clear();
+			}
+			append("</SPAN><SPAN CLASS=\"" + colourNames[style2.getForegroundColour()] + colourNames[style2.getBackgroundColour()] + codeHint + "\">");
 		}
 		synchronized (appends) {
 			appends.add(text);
@@ -102,7 +124,9 @@ public class HtmlLogger implements Logger, Runnable {
 	}
 
 	public void onCode(String code) {
-		append("<!--{"+code.substring(1,code.length()-1)+"}-->");
+		if (code.length() > 2) {
+			nextCode = code.substring(1, code.length() - 1);
+		}
 	}
 
 	public void run() {
@@ -112,7 +136,7 @@ public class HtmlLogger implements Logger, Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		List items = new ArrayList();
 		while(true) {
 			synchronized(appends) {
@@ -142,4 +166,15 @@ public class HtmlLogger implements Logger, Runnable {
 		}
 	}
 
+//	@Override
+	public void onState(String key, Object value) {
+		if (key == State.KEY_MAGIC || key == State.KEY_POINTS || key == State.KEY_STAMINA || key == State.KEY_RESET_TIME) {
+			if ((value == null && state.get(key) != null) ||
+					(state.get(key) == null && value != null) ||
+					!state.get(key).equals(value)) {
+				newState.put(key, value);
+			}
+			state.put(key, value);
+		}
+	}
 }

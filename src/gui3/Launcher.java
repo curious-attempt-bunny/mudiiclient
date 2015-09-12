@@ -11,6 +11,7 @@ import gui3.text.ScrollbackController;
 import gui3.text.ScrollbarWrapper;
 import gui3.text.SnoopHandler;
 import gui3.text.TextAreaWrapper;
+import io.listener.StateListener;
 import io.protocol.impl.BasicANSIProtocolHandler;
 import io.protocol.impl.BasicMudClientFilter;
 import io.protocol.impl.BasicMudClientModeStyle;
@@ -37,7 +38,7 @@ import domain.State;
 
 
 public class Launcher {
-	public static final String VERSION = "v1.3.0";
+	public static final String VERSION = "v1.4.0";
 	
 	private LoginWindowLayout loginWindowLayout;
 	private MainWindowWrapper mainFrame;
@@ -108,6 +109,7 @@ public class Launcher {
 		PlayerSensor playerSensor = new PlayerSensor();
 		
 		Logger logger = new HtmlLogger();
+		statsSensor.addStateListener((StateListener) logger);
 		
 		ConfigurationWindowWrapper configurationFrame = new ConfigurationWindowWrapper();
 

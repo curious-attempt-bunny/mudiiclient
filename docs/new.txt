@@ -1,6 +1,7 @@
 v1.4.0
 
 Log files are now substantially smaller because the HTML style-sheets are now online.
+Added score and stamina charts for browsing log files.
 
 v1.3.0
 

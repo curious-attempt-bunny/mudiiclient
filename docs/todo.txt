@@ -1,6 +1,5 @@
 Prioritized:
-x fix triggers
-* merge in work to make log files smaller
+* make trigger sensor more robust
 * implement snoop split screens
 * use full display width for the status bar (right align some elements?)
 * highlight critical stamina, and magic
