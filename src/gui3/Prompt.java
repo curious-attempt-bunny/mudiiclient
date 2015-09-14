@@ -102,6 +102,11 @@ public class Prompt implements ComponentWrapper, KeyListener, FontConsumer, Play
 					onHistoryPrevious();
 					cmd = component.getText();
 				}
+				// allows us to expand "op n" via "op n "
+				String expanded = commandTransformer.transform(cmd+" ");
+				if (!expanded.equals(cmd+" ")) {
+					cmd = expanded;
+				}
 				commandSender.send(cmd + "\r");
 				sentCommand(cmd);
 				if (configuration.getInt(Configuration.KEY_COMMAND_REMAINS, Configuration.DEFAULT_COMMAND_REMAINS) == 1) {

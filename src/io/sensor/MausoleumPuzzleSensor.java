@@ -1,5 +1,6 @@
 package io.sensor;
 
+import backend2.CommandSender;
 import domain.Configuration;
 import gui3.CommandTransformer;
 import io.element.ElementHandler;
@@ -13,13 +14,14 @@ import java.util.regex.Pattern;
 /**
  * Created by merlyn on 8/18/15.
  */
-public class MausoleumPuzzleSensor {
+public class MausoleumPuzzleSensor implements CommandSender {
     private Configuration configuration;
     private Map mapDirToToken;
     private Map mapDirToTrigger;
     private CommandTransformer commandTransformer;
     private LineDetector lineDetector;
     private String lastCommand;
+    private CommandSender commandSender;
 
     public MausoleumPuzzleSensor() {
         mapDirToToken = new HashMap();
@@ -33,19 +35,13 @@ public class MausoleumPuzzleSensor {
     }
 
     public void init() {
-        lineDetector.addPatternMatcherAndHandler("Written on the %d tomb is: \"%s\"", new ElementHandler() {
+        lineDetector.addPatternMatcherAndHandler("Written on the %d tomb is: \"%s", new ElementHandler() {
             public void processElement(String element, String[] parts) {
                 String token = (String) mapDirToToken.get(parts[0]);
 //                System.out.println(token + " -> "+parts[1]);
                 if (token != null) {
                     mapDirToTrigger.put(token, parts[1]);
                 }
-            }
-        });
-        lineDetector.addPatternMatcherAndHandler("\\*(.*?)(?:\\r|\\n)", new ElementHandler() {
-            public void processElement(String element, String[] parts) {
-                lastCommand = parts[0];
-//                System.out.println("CMD: "+lastCommand);
             }
         });
         lineDetector.addPatternMatcherAndHandler("You hear a%W, as the entrance to the %d tomb swings aside.", new ElementHandler() {
@@ -72,4 +68,17 @@ public class MausoleumPuzzleSensor {
         this.lineDetector = lineDetector;
     }
 
+    public void setCommandSender(CommandSender commandSender) {
+        this.commandSender = commandSender;
+    }
+
+    public void send(String text) {
+        lastCommand = text;
+//        System.out.println("CMD: "+lastCommand);
+        commandSender.send(text);
+    }
+
+    public void send(byte[] bytes) {
+        commandSender.send(bytes);
+    }
 }

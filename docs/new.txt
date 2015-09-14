@@ -1,3 +1,8 @@
+v1.4.1
+
+Fixed corner cases to triggers and sensing mausoleum puzzles. It's now very robust.
+Improved usability of opening mausoleum tombs. You can now hit enter instead of needing to hit a space. E.g. "op n"<enter> instead of "op n"<space><enter>.
+
 v1.4.0
 
 Log files are now substantially smaller because the HTML style-sheets are now online.

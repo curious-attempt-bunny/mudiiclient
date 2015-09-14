@@ -1,18 +1,22 @@
 package gui3;
 
 import domain.Configuration;
+import io.element.ElementHandler;
+import io.element.ElementMatcher;
 import io.listener.CodeListener;
 import io.listener.TextListener;
+import io.sensor.LineDetector;
 
 import java.util.*;
 
 /**
  * Created by home on 7/4/15.
  */
-public class CommandTransformer implements TextListener, CodeListener {
-    private Map triggerToMacroAndValue = new HashMap();
+public class CommandTransformer {
+//    private Map triggerToMacroAndValue = new HashMap();
     private Map macroToValue = new HashMap();
     private Configuration configuration;
+    private LineDetector lineDetector;
 
     public CommandTransformer() {
 
@@ -25,7 +29,21 @@ public class CommandTransformer implements TextListener, CodeListener {
             String name = (String)names.nextElement();
             if (name.startsWith("trigger")) {
                 String[] parts = name.split("\\|");
-                triggerToMacroAndValue.put(parts[1], configuration.getSetting(name));
+                final String trigger = parts[1].replaceAll("([*{}?.+\\]])", "\\\\$1");
+                String macroAndValue = configuration.getSetting(name);
+                parts = macroAndValue.split("\\|");
+                final String macro = parts[0];
+                final String value = parts[1];
+//                System.out.println("Trigger: "+trigger);
+//                triggerToMacroAndValue.put(parts[1], configuration.getSetting(name));
+                lineDetector.addPatternMatcherAndHandler(trigger, new ElementHandler() {
+                    public void processElement(String element, String[] parts) {
+//                        System.out.println("Trigger fired: \"" + trigger + "\".");
+//                        System.out.println("Setting macro "+macro+" --> "+value);
+
+                        macroToValue.put(macro, value);
+                    }
+                });
             }
         }
     }
@@ -44,28 +62,32 @@ public class CommandTransformer implements TextListener, CodeListener {
         return transformed;
     }
 
-    public void onText(String text) {
-        Iterator triggers = triggerToMacroAndValue.keySet().iterator();
-        while(triggers.hasNext()) {
-            String trigger = (String) triggers.next();
-
-            if (text.indexOf(trigger) != -1) {
-                String macroAndValue = (String) triggerToMacroAndValue.get(trigger);
-                String[] parts = macroAndValue.split("\\|");
-
-                System.out.println("Trigger fired: \"" + trigger + "\".");
-                System.out.println("Setting macro "+parts[0]+" --> "+parts[1]);
-
-                macroToValue.put(parts[0], parts[1]);
-            }
-        }
-    }
-
-    public void onCode(String code) {
-
-    }
+//    public void onText(String text) {
+//        Iterator triggers = triggerToMacroAndValue.keySet().iterator();
+//        while(triggers.hasNext()) {
+//            String trigger = (String) triggers.next();
+//
+//            if (text.indexOf(trigger) != -1) {
+//                String macroAndValue = (String) triggerToMacroAndValue.get(trigger);
+//                String[] parts = macroAndValue.split("\\|");
+//
+//                System.out.println("Trigger fired: \"" + trigger + "\".");
+//                System.out.println("Setting macro "+parts[0]+" --> "+parts[1]);
+//
+//                macroToValue.put(parts[0], parts[1]);
+//            }
+//        }
+//    }
+//
+//    public void onCode(String code) {
+//
+//    }
 
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
+    }
+
+    public void setLineDetector(LineDetector lineDetector) {
+        this.lineDetector = lineDetector;
     }
 }

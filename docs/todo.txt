@@ -1,5 +1,4 @@
 Prioritized:
-* make trigger sensor more robust
 * implement snoop split screens
 * use full display width for the status bar (right align some elements?)
 * highlight critical stamina, and magic

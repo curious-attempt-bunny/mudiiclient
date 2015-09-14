@@ -38,7 +38,7 @@ import domain.State;
 
 
 public class Launcher {
-	public static final String VERSION = "v1.4.0";
+	public static final String VERSION = "v1.4.1";
 	
 	private LoginWindowLayout loginWindowLayout;
 	private MainWindowWrapper mainFrame;
@@ -116,7 +116,7 @@ public class Launcher {
 		CommandTransformer commandTransformer = new CommandTransformer();
 
 		commandTransformer.setConfiguration(configuration);
-		mudClientFilter.addTextListener(commandTransformer);
+		commandTransformer.setLineDetector(lineDetector);
 		prompt.setCommandTransformer(commandTransformer);
 		commandTransformer.init();
 
@@ -125,6 +125,8 @@ public class Launcher {
 		mausoleumPuzzleSensor.setCommandTransformer(commandTransformer);
 		mausoleumPuzzleSensor.setLineDetector(lineDetector);
 //		mudClientFilter.addTextListener(mausoleumPuzzleSensor);
+		mausoleumPuzzleSensor.setCommandSender(uiCommandSender);
+		uiCommandSender = mausoleumPuzzleSensor; // intercept commands sent
 
 		commandSender = io;
 		

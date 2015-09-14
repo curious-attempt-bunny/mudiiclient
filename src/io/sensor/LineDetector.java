@@ -8,6 +8,7 @@ import io.listener.StateListener;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,13 +47,27 @@ public class LineDetector implements Sensor, StateListener {
 
     private void onLine(String str) {
 //        System.err.println("*** " + str + " ***");
+        LinkedHashMap fired = new LinkedHashMap();
         Iterator iterator = mapMatcherToHandler.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry) iterator.next();
             ElementMatcher elementMatcher = (ElementMatcher) entry.getKey();
             ElementHandler elementHandler = (ElementHandler) entry.getValue();
             if (elementMatcher.isMatch(str)) {
-//                System.out.print("MATCH TO ");
+                fired.put(elementMatcher, str);
+            }
+        }
+
+        // prevent concurrent modification problems
+        if (!fired.isEmpty()) {
+            iterator = fired.entrySet().iterator();
+            while(iterator.hasNext()) {
+                Map.Entry entry = (Map.Entry) iterator.next();
+                ElementMatcher elementMatcher = (ElementMatcher) entry.getKey();
+                str = (String) entry.getValue();
+                ElementHandler elementHandler = (ElementHandler) mapMatcherToHandler.get(elementMatcher);
+
+                //                System.out.print("MATCH TO ");
                 String[] parts = elementMatcher.getParts();
 //                for (int i =0 ; i< parts.length; i++) {
 //                    String part = parts[i];
@@ -60,6 +75,7 @@ public class LineDetector implements Sensor, StateListener {
 //                }
 //                System.out.println();
                 elementHandler.processElement(str, parts);
+
             }
         }
     }
