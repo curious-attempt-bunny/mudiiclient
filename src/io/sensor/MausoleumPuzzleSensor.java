@@ -73,7 +73,7 @@ public class MausoleumPuzzleSensor implements CommandSender {
     }
 
     public void send(String text) {
-        lastCommand = text;
+        lastCommand = text.trim();
 //        System.out.println("CMD: "+lastCommand);
         commandSender.send(text);
     }
