@@ -116,52 +116,52 @@ public class LoginWrapper implements ComponentWrapper {
 		component.add(rememberLogin, c);
 //		rememberLogin.addActionListener(this);
 		
-		c.gridwidth=1;
-		
-		c.gridx=3;
-		c.gridy=y;
-		component.add(addToolTipText("visit mudii.co.uk to create an account", createLink("Create an account", "http://www.mudii.co.uk/newaccount.php")), c);
-//		 http://www.mudii.co.uk/newaccount.php
-			
-		c.gridx=4;
-		c.gridy=y++;
-		c.anchor=GridBagConstraints.EAST;
-		JButton loginButton = createButton("Login");
-		component.add(loginButton, c);
-		loginButton.addActionListener(loginActionListener);
-		
-		c.anchor=GridBagConstraints.WEST;
-
-		c.gridx=3;
-		c.gridy=y;
-		component.add(addToolTipText("contact the administrator for your account details", createLink("Request lost account details", "http://www.mudii.co.uk/contactus.php")), c);
-
-		c.gridx=4;
-		c.gridy=y++;
-		c.anchor=GridBagConstraints.EAST;
-		JButton guestLoginButton = createButton("Guest Login");
-		component.add(guestLoginButton, c);
-		guestLoginButton.addActionListener(guestloginActionListener);
-		
-		c.anchor=GridBagConstraints.WEST;
-
-		c.gridx=3;
-		c.gridy=y++;
-		component.add(addToolTipText("straight from the author's mouth", createLink("Beginners Companion", "http://mud.co.uk/muse/begscomp.htm")), c);
-		
-		c.gridx=3;
-		c.gridy=y;
-		component.add(addToolTipText("find out more about mud at muddled-times.com", createLink("Get in the know, read the MT:", "http://www.muddled-times.com/issue.fod")), c);
-		
-		c.gridx=4;
-		c.gridy=y++;
-		component.add(addToolTipText("find out more about mud at muddled-times.com", makeBrowsable("http://www.muddled-times.com/issue.fod", new JLabel(imageIcon4))), c);
-		
-		c.gridx=3;
-		c.gridy=y;
-		component.add(addToolTipText("makes yourself heard on the forums", createLink("Discuss mud topics on the forums", "http://www.mudii.co.uk/forums/")), c);
-		
-		
+//		c.gridwidth=1;
+//
+//		c.gridx=3;
+//		c.gridy=y;
+//		component.add(addToolTipText("visit mudii.co.uk to create an account", createLink("Create an account", "http://www.mudii.co.uk/newaccount.php")), c);
+////		 http://www.mudii.co.uk/newaccount.php
+//
+//		c.gridx=4;
+//		c.gridy=y++;
+//		c.anchor=GridBagConstraints.EAST;
+//		JButton loginButton = createButton("Login");
+//		component.add(loginButton, c);
+//		loginButton.addActionListener(loginActionListener);
+//
+//		c.anchor=GridBagConstraints.WEST;
+//
+//		c.gridx=3;
+//		c.gridy=y;
+//		component.add(addToolTipText("contact the administrator for your account details", createLink("Request lost account details", "http://www.mudii.co.uk/contactus.php")), c);
+//
+//		c.gridx=4;
+//		c.gridy=y++;
+//		c.anchor=GridBagConstraints.EAST;
+//		JButton guestLoginButton = createButton("Guest Login");
+//		component.add(guestLoginButton, c);
+//		guestLoginButton.addActionListener(guestloginActionListener);
+//
+//		c.anchor=GridBagConstraints.WEST;
+//
+//		c.gridx=3;
+//		c.gridy=y++;
+//		component.add(addToolTipText("straight from the author's mouth", createLink("Beginners Companion", "http://mud.co.uk/muse/begscomp.htm")), c);
+//
+//		c.gridx=3;
+//		c.gridy=y;
+//		component.add(addToolTipText("find out more about mud at muddled-times.com", createLink("Get in the know, read the MT:", "http://www.muddled-times.com/issue.fod")), c);
+//
+//		c.gridx=4;
+//		c.gridy=y++;
+//		component.add(addToolTipText("find out more about mud at muddled-times.com", makeBrowsable("http://www.muddled-times.com/issue.fod", new JLabel(imageIcon4))), c);
+//
+//		c.gridx=3;
+//		c.gridy=y;
+//		component.add(addToolTipText("makes yourself heard on the forums", createLink("Discuss mud topics on the forums", "http://www.mudii.co.uk/forums/")), c);
+//
+//
 		// 
 		
 		if (configuration.getInt(host+".login.remember", 1) == 1) {
