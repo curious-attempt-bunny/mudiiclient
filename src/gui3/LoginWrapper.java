@@ -11,26 +11,20 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.*;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
 import backend2.BareBonesBrowserLaunch;
 import domain.Configuration;
+import javafx.scene.input.KeyCode;
 
 public class LoginWrapper implements ComponentWrapper {
 	private Color fg = new Color(0xff,0xbb, 0x3f);
 	private Color bg = new Color(0,0,0x4e);
 	private JPanel component;
 	private LoginFacade loginHandler;
-	private JTextField systemUser;
+	private JComboBox systemUser;
 	private JPasswordField systemPassword;
 	private JTextField accountUser;
 	private JPasswordField accountPassword;
@@ -38,7 +32,8 @@ public class LoginWrapper implements ComponentWrapper {
 	private GameWindowLayout gameWindowLayout;
 	private Configuration configuration;
 	private String host;
-	
+	private JLabel systemPasswordLabel;
+
 	public void setHost(String host) {
 		this.host = host;
 	}
@@ -96,14 +91,39 @@ public class LoginWrapper implements ComponentWrapper {
 
 		c.gridx=4;
 		c.gridy=y++;
-		systemUser = new JTextField(12);
+		systemUser = new JComboBox(new String[] {"mud","mudguest"});
+		systemUser.setEditable(true);
+		JTextField editor = (JTextField) systemUser.getEditor().getEditorComponent();
+		editor.setColumns(10);
 		component.add(systemUser, c);
-		systemUser.addActionListener(loginActionListener);
+		systemUser.getEditor().getEditorComponent().addKeyListener(new KeyListener() {
+			public void keyTyped(KeyEvent e) {
+			}
+
+			public void keyPressed(KeyEvent e) {
+				updateSystemPasswordEnabledState();
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					loginAction();
+				}
+
+			}
+
+			public void keyReleased(KeyEvent e) {
+
+			}
+		});
+		systemUser.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				updateSystemPasswordEnabledState();
+			}
+		});
+//		systemUser.addActionListener(loginActionListener);
 
 
 		c.gridx=3;
 		c.gridy=y;
-		component.add(createLabel("System password:"), c);
+		systemPasswordLabel = createLabel("System password:");
+		component.add(systemPasswordLabel, c);
 
 		c.gridx=4;
 		c.gridy=y++;
@@ -146,7 +166,7 @@ public class LoginWrapper implements ComponentWrapper {
 		
 		if (configuration.getInt(host+".login.remember", 1) == 1) {
 			rememberLogin.setSelected(true);
-			systemUser.setText(configuration.getSetting(host+".system.user", "mud"));
+			systemUser.setSelectedItem(configuration.getSetting(host + ".system.user", "mud"));
 			systemPassword.setText(unscramble(configuration.getSetting(host + ".system.password", "")));
 			accountUser.setText(configuration.getSetting(host+".account.user", ""));
 			accountPassword.setText(unscramble(configuration.getSetting(host+".account.password", "")));
@@ -172,6 +192,16 @@ public class LoginWrapper implements ComponentWrapper {
 
 			}
 		});
+
+		updateSystemPasswordEnabledState();
+	}
+
+	private void updateSystemPasswordEnabledState() {
+		String sysUser = getSystemUser();
+		boolean enabled = !(sysUser.equals("mud") || sysUser.equals("mudguest"));
+		systemPassword.setEnabled(enabled);
+		systemPasswordLabel.setEnabled(enabled);
+		highlightComponent(systemPassword, false);
 	}
 
 	private String unscramble(String str) {
@@ -286,6 +316,9 @@ public class LoginWrapper implements ComponentWrapper {
 		highlightComponent(accountUser, false);
 		highlightComponent(accountPassword, false);
 		boolean isFailed = false;
+
+		String sysUser = getSystemUser();
+
 		if (accountUser.getText().length() < 9) {
 			highlightComponent(accountUser, true);
 			accountUser.requestFocus();
@@ -294,17 +327,21 @@ public class LoginWrapper implements ComponentWrapper {
 			highlightComponent(accountPassword, true);
 			accountPassword.requestFocus();
 			isFailed = true;
+		} else if (systemPassword.getPassword().length == 0 && !(sysUser.equals("mud") || sysUser.equals("mudguest"))) {
+			highlightComponent(systemPassword, true);
+			systemPassword.requestFocus();
+			isFailed = true;
 		}
 		
 		if (!isFailed) {
 			if (rememberLogin.isSelected()) {
-				configuration.setSetting(host+".system.user", systemUser.getText());
+				configuration.setSetting(host+".system.user", sysUser);
 				configuration.setSetting(host+".system.password", scramble(new String(systemPassword.getPassword())));
 				configuration.setSetting(host+".account.user", accountUser.getText());
 				configuration.setSetting(host+".account.password", scramble(new String(accountPassword.getPassword())));
 			}
 			
-			loginHandler.setSystemUser(systemUser.getText());
+			loginHandler.setSystemUser(sysUser);
 			loginHandler.setSystemPassword(new String(systemPassword.getPassword()));
 			loginHandler.setAccountUser(accountUser.getText());
 			loginHandler.setAccountPassword(new String(accountPassword.getPassword()));
@@ -312,6 +349,16 @@ public class LoginWrapper implements ComponentWrapper {
 			
 			gameWindowLayout.doLayout();
 		}
+	}
+
+	private String getSystemUser() {
+		String sysUser;
+		if (systemUser.isValid()) {
+			sysUser = (String) systemUser.getSelectedItem();
+		} else {
+			sysUser = (String) systemUser.getEditor().getItem();
+		}
+		return sysUser;
 	}
 
 	public void guestloginAction() {

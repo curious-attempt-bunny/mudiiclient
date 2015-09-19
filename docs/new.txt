@@ -1,3 +1,8 @@
+v1.6.0
+
+Added support for wizzes to login.
+Removed a lot of cruft from the login screen.
+
 v1.5.0
 
 Added triggers. Receiving trigger text will now automatically send a specified command. To use this manually edit the config.txt file. See forum post.
