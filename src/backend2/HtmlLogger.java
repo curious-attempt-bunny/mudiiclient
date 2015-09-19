@@ -7,9 +7,11 @@ import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.*;
 
 import domain.Style;
+import gui3.Launcher;
 import io.listener.StateListener;
 
 public class HtmlLogger implements Logger, Runnable, StateListener {
@@ -32,7 +34,7 @@ public class HtmlLogger implements Logger, Runnable, StateListener {
 		append("<html>\r");
 		append("<head>\r");
 		append("<link rel=\"stylesheet\" href=\"http://mud2.net/log/style.css\" type=\"text/css\">");
-		append("<script src=\"http://mud2.net/log/script.js\"></script>");
+		append("<script src=\"http://mud2.net/log/script.js?v=" + URLEncoder.encode(Launcher.VERSION) + "\"></script>");
 
 //		append("<style type=\"text/css\">\r");
 //		for(int f=0; f<16; f++) {

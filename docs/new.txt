@@ -1,6 +1,7 @@
 v1.5.0
 
 Added triggers. Receiving trigger text will now automatically send a specified command. To use this manually edit the config.txt file. See forum post.
+Added the version of the app that recorded the log file to the HTML log file. This will make it easier to manage changes in the format over time.
 
 v1.4.1
 
