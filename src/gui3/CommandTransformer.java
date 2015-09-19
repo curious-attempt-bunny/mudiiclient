@@ -1,5 +1,6 @@
 package gui3;
 
+import backend2.CommandSender;
 import domain.Configuration;
 import io.element.ElementHandler;
 import io.element.ElementMatcher;
@@ -18,6 +19,8 @@ public class CommandTransformer {
     private Configuration configuration;
     private LineDetector lineDetector;
 
+    private CommandSender commandSender;
+
     public CommandTransformer() {
 
     }
@@ -31,19 +34,28 @@ public class CommandTransformer {
                 String[] parts = name.split("\\|");
                 final String trigger = parts[1].replaceAll("([*{}?.+\\]])", "\\\\$1");
                 String macroAndValue = configuration.getSetting(name);
-                parts = macroAndValue.split("\\|");
-                final String macro = parts[0];
-                final String value = parts[1];
-//                System.out.println("Trigger: "+trigger);
-//                triggerToMacroAndValue.put(parts[1], configuration.getSetting(name));
-                lineDetector.addPatternMatcherAndHandler(trigger, new ElementHandler() {
-                    public void processElement(String element, String[] parts) {
-//                        System.out.println("Trigger fired: \"" + trigger + "\".");
-//                        System.out.println("Setting macro "+macro+" --> "+value);
+                if (macroAndValue.indexOf("|") == -1) {
+                    final String triggerCommand = macroAndValue;
+                    lineDetector.addPatternMatcherAndHandler(trigger, new ElementHandler() {
+                        public void processElement(String element, String[] parts) {
+                            commandSender.send(triggerCommand+ "\r");
+                        }
+                    });
+                } else {
+                    parts = macroAndValue.split("\\|");
+                    final String macro = parts[0];
+                    final String value = parts[1];
+                    //                System.out.println("Trigger: "+trigger);
+                    //                triggerToMacroAndValue.put(parts[1], configuration.getSetting(name));
+                    lineDetector.addPatternMatcherAndHandler(trigger, new ElementHandler() {
+                        public void processElement(String element, String[] parts) {
+                            //                        System.out.println("Trigger fired: \"" + trigger + "\".");
+                            //                        System.out.println("Setting macro "+macro+" --> "+value);
 
-                        macroToValue.put(macro, value);
-                    }
-                });
+                            macroToValue.put(macro, value);
+                        }
+                    });
+                }
             }
         }
     }
@@ -90,4 +102,9 @@ public class CommandTransformer {
     public void setLineDetector(LineDetector lineDetector) {
         this.lineDetector = lineDetector;
     }
+
+    public void setCommandSender(CommandSender commandSender) {
+        this.commandSender = commandSender;
+    }
+
 }

@@ -129,7 +129,9 @@ public class Launcher {
 		uiCommandSender = mausoleumPuzzleSensor; // intercept commands sent
 
 		commandSender = io;
-		
+
+		commandTransformer.setCommandSender(commandSender);
+
 		// ------- setters
 
 		io.setHost(System.getProperty("host", "mudii.co.uk"));
