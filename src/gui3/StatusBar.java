@@ -165,6 +165,10 @@ public class StatusBar extends JPanel {
 			if (items[i].isDrawable(isSmallText)) {
 				String text = items[i].getText(isSmallText);
 				int offset = items[i].getOffset(isSmallText);
+				if (i == items.length - 1) {
+					// right-align the last item
+					offset = Math.max(offset, (int)((size.getWidth() - 2*MARGIN)/fontWidth) - text.length());
+				}
 				g.setColor(items[i].color);
 				g.drawString(text, MARGIN + offset*fontWidth, MARGIN + fontAscent);
 			}
