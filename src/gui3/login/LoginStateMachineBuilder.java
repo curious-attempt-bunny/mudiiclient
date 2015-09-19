@@ -12,7 +12,7 @@ public class LoginStateMachineBuilder {
 	public FiniteStateMachine build(LoginDetails loginDetails) {
 		FiniteStateMachine finiteStateMachine = new FiniteStateMachine();
 
-		StateTransition transitionEnterClientMode = createTransition("Option \\(H for help\\):", "/F\r/M1\ry", LoginFacade.STATE_END);
+		StateTransition transitionEnterClientMode = createTransition("Option", "/F\r/M1\ry", LoginFacade.STATE_END);
 		StateTransition transitionFinishNews = createTransition("Hit return.", "", LoginFacade.STATE_POST_NEWS);
 		StateTransition transitionSkipNews = createTransition("Skip the rest\\? \\(y/n\\)", "n", LoginFacade.STATE_POST_SKIP_NEWS_ITEM);
 		StateTransition transitionAccountPassword = createTransition("Account ID:", loginDetails.getAccountUser(), LoginFacade.STATE_POST_ACCOUNT_USER);
@@ -23,7 +23,7 @@ public class LoginStateMachineBuilder {
 		finiteStateMachine.addTransition(LoginFacade.STATE_POST_LOGIN, createTransition("Password:", loginDetails.getSystemPassword(), LoginFacade.STATE_POST_SYSTEM_PASSWORD));
 		finiteStateMachine.addTransition(LoginFacade.STATE_POST_LOGIN, transitionSkipNews);
 		finiteStateMachine.addTransition(LoginFacade.STATE_POST_LOGIN, createTransition("Hit return.", "", LoginFacade.STATE_POST_SKIP_NEWS_ITEM));
-		
+
 		finiteStateMachine.addTransition(LoginFacade.STATE_POST_SYSTEM_PASSWORD, createTransition("@tesuji:~\\$", "/usr/bin/mudlogin", LoginFacade.STATE_POST_SYSTEM_PASSWORD));
 		finiteStateMachine.addTransition(LoginFacade.STATE_POST_SYSTEM_PASSWORD, transitionAccountPassword);
 		
@@ -38,6 +38,7 @@ public class LoginStateMachineBuilder {
 		finiteStateMachine.addTransition(LoginFacade.STATE_POST_ACCOUNT_PASSWORD, new LoginSuperseedUserPromptTransition("Do you want to supersede this other session?", commandSender, hostComponent ));
 		
 		finiteStateMachine.addTransition(LoginFacade.STATE_POST_SKIP_NEWS_ITEM, transitionFinishNews);
+		finiteStateMachine.addTransition(LoginFacade.STATE_POST_SKIP_NEWS_ITEM, transitionEnterClientMode);
 
 		finiteStateMachine.addTransition(LoginFacade.STATE_POST_NEWS, transitionEnterClientMode);
 	

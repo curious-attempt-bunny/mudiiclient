@@ -9,10 +9,7 @@ import java.awt.Cursor;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -22,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 import backend2.BareBonesBrowserLaunch;
 import domain.Configuration;
@@ -31,6 +30,8 @@ public class LoginWrapper implements ComponentWrapper {
 	private Color bg = new Color(0,0,0x4e);
 	private JPanel component;
 	private LoginFacade loginHandler;
+	private JTextField systemUser;
+	private JPasswordField systemPassword;
 	private JTextField accountUser;
 	private JPasswordField accountPassword;
 	private JCheckBox rememberLogin;
@@ -88,7 +89,28 @@ public class LoginWrapper implements ComponentWrapper {
 		c.gridwidth=1;
 		
 		c.anchor=GridBagConstraints.WEST;
-		
+
+		c.gridx=3;
+		c.gridy=y;
+		component.add(createLabel("System user:"), c);
+
+		c.gridx=4;
+		c.gridy=y++;
+		systemUser = new JTextField(12);
+		component.add(systemUser, c);
+		systemUser.addActionListener(loginActionListener);
+
+
+		c.gridx=3;
+		c.gridy=y;
+		component.add(createLabel("System password:"), c);
+
+		c.gridx=4;
+		c.gridy=y++;
+		systemPassword = new JPasswordField(12);
+		component.add(systemPassword, c);
+		systemPassword.addActionListener(loginActionListener);
+
 		c.gridx=3;
 		c.gridy=y;
 		component.add(createLabel("Account ID:"), c);
@@ -114,64 +136,42 @@ public class LoginWrapper implements ComponentWrapper {
 		c.gridwidth=2;
 		rememberLogin = createCheckBox();
 		component.add(rememberLogin, c);
-//		rememberLogin.addActionListener(this);
-		
-//		c.gridwidth=1;
-//
-//		c.gridx=3;
-//		c.gridy=y;
-//		component.add(addToolTipText("visit mudii.co.uk to create an account", createLink("Create an account", "http://www.mudii.co.uk/newaccount.php")), c);
-////		 http://www.mudii.co.uk/newaccount.php
-//
-//		c.gridx=4;
-//		c.gridy=y++;
-//		c.anchor=GridBagConstraints.EAST;
-//		JButton loginButton = createButton("Login");
-//		component.add(loginButton, c);
-//		loginButton.addActionListener(loginActionListener);
-//
-//		c.anchor=GridBagConstraints.WEST;
-//
-//		c.gridx=3;
-//		c.gridy=y;
-//		component.add(addToolTipText("contact the administrator for your account details", createLink("Request lost account details", "http://www.mudii.co.uk/contactus.php")), c);
-//
-//		c.gridx=4;
-//		c.gridy=y++;
-//		c.anchor=GridBagConstraints.EAST;
-//		JButton guestLoginButton = createButton("Guest Login");
-//		component.add(guestLoginButton, c);
-//		guestLoginButton.addActionListener(guestloginActionListener);
-//
-//		c.anchor=GridBagConstraints.WEST;
-//
-//		c.gridx=3;
-//		c.gridy=y++;
-//		component.add(addToolTipText("straight from the author's mouth", createLink("Beginners Companion", "http://mud.co.uk/muse/begscomp.htm")), c);
-//
-//		c.gridx=3;
-//		c.gridy=y;
-//		component.add(addToolTipText("find out more about mud at muddled-times.com", createLink("Get in the know, read the MT:", "http://www.muddled-times.com/issue.fod")), c);
-//
-//		c.gridx=4;
-//		c.gridy=y++;
-//		component.add(addToolTipText("find out more about mud at muddled-times.com", makeBrowsable("http://www.muddled-times.com/issue.fod", new JLabel(imageIcon4))), c);
-//
-//		c.gridx=3;
-//		c.gridy=y;
-//		component.add(addToolTipText("makes yourself heard on the forums", createLink("Discuss mud topics on the forums", "http://www.mudii.co.uk/forums/")), c);
-//
-//
-		// 
+
+		c.gridx=4;
+		c.gridy=y++;
+		c.anchor=GridBagConstraints.EAST;
+		JButton loginButton = createButton("Login");
+		component.add(loginButton, c);
+		loginButton.addActionListener(loginActionListener);
 		
 		if (configuration.getInt(host+".login.remember", 1) == 1) {
 			rememberLogin.setSelected(true);
+			systemUser.setText(configuration.getSetting(host+".system.user", "mud"));
+			systemPassword.setText(unscramble(configuration.getSetting(host + ".system.password", "")));
 			accountUser.setText(configuration.getSetting(host+".account.user", ""));
 			accountPassword.setText(unscramble(configuration.getSetting(host+".account.password", "")));
 		}
-		
+
+		highlightComponent(systemUser, false);
+		highlightComponent(systemPassword, false);
 		highlightComponent(accountUser, false);
 		highlightComponent(accountPassword, false);
+
+//		component.addPropertyChangeListener();
+
+		component.addAncestorListener(new AncestorListener() {
+			public void ancestorAdded(AncestorEvent event) {
+				accountUser.requestFocus();
+			}
+
+			public void ancestorRemoved(AncestorEvent event) {
+
+			}
+
+			public void ancestorMoved(AncestorEvent event) {
+
+			}
+		});
 	}
 
 	private String unscramble(String str) {
@@ -268,7 +268,7 @@ public class LoginWrapper implements ComponentWrapper {
 	}
 
 	private JCheckBox createCheckBox() {
-		JCheckBox checkBox = new JCheckBox("remember account details");
+		JCheckBox checkBox = new JCheckBox("remember login details");
 		checkBox.setBackground(bg);
 		checkBox.setForeground(fg);
 		return checkBox;
@@ -281,6 +281,8 @@ public class LoginWrapper implements ComponentWrapper {
 	}
 
 	public void loginAction() {
+		highlightComponent(systemUser, false);
+		highlightComponent(systemPassword, false);
 		highlightComponent(accountUser, false);
 		highlightComponent(accountPassword, false);
 		boolean isFailed = false;
@@ -296,12 +298,14 @@ public class LoginWrapper implements ComponentWrapper {
 		
 		if (!isFailed) {
 			if (rememberLogin.isSelected()) {
+				configuration.setSetting(host+".system.user", systemUser.getText());
+				configuration.setSetting(host+".system.password", scramble(new String(systemPassword.getPassword())));
 				configuration.setSetting(host+".account.user", accountUser.getText());
 				configuration.setSetting(host+".account.password", scramble(new String(accountPassword.getPassword())));
 			}
 			
-			loginHandler.setSystemUser("mud");
-			loginHandler.setSystemPassword(System.getProperty("system.password"));
+			loginHandler.setSystemUser(systemUser.getText());
+			loginHandler.setSystemPassword(new String(systemPassword.getPassword()));
 			loginHandler.setAccountUser(accountUser.getText());
 			loginHandler.setAccountPassword(new String(accountPassword.getPassword()));
 			loginHandler.login();
