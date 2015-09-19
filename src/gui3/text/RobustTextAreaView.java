@@ -9,9 +9,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +21,7 @@ import javax.swing.JPanel;
 import domain.Configuration;
 import domain.Style;
 
-public class RobustTextAreaView extends JPanel implements MouseListener, MouseMotionListener, DocumentListener, ClipboardOwner, TextView {
+public class RobustTextAreaView extends JPanel implements MouseListener, MouseMotionListener, DocumentListener, ClipboardOwner, TextView, MouseWheelListener {
 
 	private final int MARGIN = 5;
 	
@@ -52,11 +50,13 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 	private Point selectEnd;
 
 	private List viewListeners;
-	
-	public RobustTextAreaView(ColourHelper colourHelper, BetterTextAreaDocument document) {
+	private ScrollbackController scrollbackController;
+
+	public RobustTextAreaView(ColourHelper colourHelper, BetterTextAreaDocument document, ScrollbackController scrollbackController) {
 		this.colourHelper = colourHelper;
 		this.document = document;
-		
+		this.scrollbackController = scrollbackController;
+
 		viewListeners = new Vector();
 		
 		isFontChanged = true;
@@ -64,6 +64,7 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		document.addDocumentListener(this);
+		addMouseWheelListener(this);
 	}
 	
 	// TODO add to interface
@@ -225,7 +226,7 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 	private void paintBackground(Graphics gc) {
 		Dimension size = getSize();
 		gc.setColor(colourHelper.get(Style.COLOUR_BLACK));
-		gc.fillRect(0, 0, (int)size.getWidth(), (int)size.getHeight());
+		gc.fillRect(0, 0, (int) size.getWidth(), (int) size.getHeight());
 	}
 
 	private void checkLineWidth() {
@@ -291,6 +292,27 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 	public void setLineIndex(int i) {
 		lineIndex = i;
 		fireOnViewLineChange(lineIndex);
+	}
+
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		// we want to route the mouse wheel movement to the correct view (plus enable and disable scrollback)
+		scrollbackController.move(e.getWheelRotation());
+	}
+
+	public void onMove(int wheelRotation) {
+		if (configuration.getBoolean("mouse.wheel.inverted", false)) {
+			lineIndex += wheelRotation;
+		} else {
+			lineIndex -= wheelRotation;
+		}
+
+		if (lineIndex >= document.getLineCount()) {
+			lineIndex = document.getLineCount()-1;
+		} else if (lineIndex <= 0) {
+			lineIndex = 0;
+		}
+		fireOnViewLineChange(lineIndex);
+		repaint();
 	}
 
 	public void addViewListener(ViewListener viewListener) {

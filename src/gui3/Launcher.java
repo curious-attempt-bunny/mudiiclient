@@ -75,6 +75,9 @@ public class Launcher {
 		loginWrapper = new LoginWrapper();
 		LineDetector lineDetector = new LineDetector();
 
+		scrollback.setScrollbackController(scrollbackController);
+		mainText.setScrollbackController(scrollbackController);
+
 		ColourHelper colourHelper = new ConfigurableColourHelper( new DefaultColourHelper() );
 		FocusRetargetter focusRetargetter0 = new FocusRetargetter();
 		FocusRetargetter focusRetargetter1 = new FocusRetargetter();

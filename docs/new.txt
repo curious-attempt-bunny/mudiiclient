@@ -1,3 +1,8 @@
+next --
+
+Right align the reset time in the status bar.
+
+
 v1.6.0
 
 Added support for wizzes to login.

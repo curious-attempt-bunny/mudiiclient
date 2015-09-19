@@ -20,7 +20,8 @@ public class TextAreaWrapper implements ComponentWrapper, OutputListener, StyleL
 	private boolean isScrollback;
 	private BetterTextAreaDocument document;
 	private Configuration configuration;
-	
+	private ScrollbackController scrollbackController;
+
 	public void onState(String key, Object value) {
 
 	}
@@ -34,7 +35,7 @@ public class TextAreaWrapper implements ComponentWrapper, OutputListener, StyleL
 	}
 
 	public void init() {
-		component = new RobustTextAreaView(colourHelper, document);
+		component = new RobustTextAreaView(colourHelper, document, scrollbackController);
 		component.setScrollback(isScrollback);
 		component.setConfiguration(configuration);
 	}
@@ -81,4 +82,7 @@ public class TextAreaWrapper implements ComponentWrapper, OutputListener, StyleL
 		
 	}
 
+	public void setScrollbackController(ScrollbackController scrollbackController) {
+		this.scrollbackController = scrollbackController;
+	}
 }

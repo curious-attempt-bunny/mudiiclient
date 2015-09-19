@@ -62,4 +62,10 @@ public class ScrollbackController {
 	public void setScrollbarWrapper(ScrollbarWrapper scrollbarWrapper) {
 		this.scrollbarWrapper = scrollbarWrapper;
 	}
+
+	public void move(int wheelRotation) {
+		TextView textArea = (TextView)scrollback.getComponent();
+		textArea.onMove(wheelRotation);
+		setEnabled(textArea.getLineIndex() > 0);
+	}
 }

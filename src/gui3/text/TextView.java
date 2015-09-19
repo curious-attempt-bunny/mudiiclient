@@ -16,4 +16,6 @@ public interface TextView {
 	void setLineIndex(int i);
 
 	void repaint();
+
+	void onMove(int wheelRotation);
 }
