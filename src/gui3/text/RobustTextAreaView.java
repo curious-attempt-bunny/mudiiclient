@@ -300,7 +300,7 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 	}
 
 	public void onMove(int wheelRotation) {
-		if (configuration.getBoolean("mouse.wheel.inverted", false)) {
+		if (configuration.getInt(Configuration.KEY_INVERT_MOUSE_WHEEL_SCROLLING, 0) == 1) {
 			lineIndex += wheelRotation;
 		} else {
 			lineIndex -= wheelRotation;

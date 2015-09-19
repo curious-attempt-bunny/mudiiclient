@@ -35,7 +35,8 @@ public class ConfigurationWindowWrapper implements WindowWrapper, ComponentListe
 	private JCheckBox optionActiveDataCollection;
 	private JCheckBox optionMaxWidth80;
 	private ColourHelper colourHelper;
-	
+	private JCheckBox invertedScrolling;
+
 	public Component getComponent() {
 		return component;
 	}
@@ -172,6 +173,11 @@ public class ConfigurationWindowWrapper implements WindowWrapper, ComponentListe
 
 		c.gridx = 0;
 		c.gridy = y++;
+		invertedScrolling = new JCheckBox("invert mouse wheel scrolling");
+		container.add(invertedScrolling, c);
+
+		c.gridx = 0;
+		c.gridy = y++;
 		container.add(new JLabel("Note:"), c);
 
 		c.gridx = 0;
@@ -193,6 +199,7 @@ public class ConfigurationWindowWrapper implements WindowWrapper, ComponentListe
 		optionCommandRemains.setSelected(configuration.getInt(Configuration.KEY_COMMAND_REMAINS, Configuration.DEFAULT_COMMAND_REMAINS) == 1);
 		optionActiveDataCollection.setSelected(configuration.getInt(Configuration.KEY_ACTIVE_DATA_COLLECTION, Configuration.DEFAULT_ACTIVE_DATA_COLLECTION) == 1);
 		optionMaxWidth80.setSelected(configuration.getInt(Configuration.KEY_MAX_WIDTH_80, Configuration.DEFAULT_MAX_WIDTH_80) == 1);
+		invertedScrolling.setSelected(configuration.getInt(Configuration.KEY_INVERT_MOUSE_WHEEL_SCROLLING, Configuration.DEFAULT_INVERT_MOUSE_WHEEL_SCROLLING) == 1);
 		optionLogging.requestFocus();
 	}
 
@@ -232,6 +239,7 @@ public class ConfigurationWindowWrapper implements WindowWrapper, ComponentListe
 		configuration.setInt(Configuration.KEY_COMMAND_REMAINS, optionCommandRemains.isSelected() ? 1 : 0);
 		configuration.setInt(Configuration.KEY_ACTIVE_DATA_COLLECTION, optionActiveDataCollection.isSelected() ? 1 : 0);
 		configuration.setInt(Configuration.KEY_MAX_WIDTH_80, optionMaxWidth80.isSelected() ? 1 : 0);
+		configuration.setInt(Configuration.KEY_INVERT_MOUSE_WHEEL_SCROLLING, invertedScrolling.isSelected() ? 1 : 0);
 		hide();
 	}
 

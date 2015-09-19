@@ -1,6 +1,8 @@
 next --
 
 Right align the reset time in the status bar.
+Add mouse wheel scrolling (which works for Mac track pad scrolling also).
+Added configuration support for inverting the mouse wheel scroll direction.
 
 
 v1.6.0

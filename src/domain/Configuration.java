@@ -13,13 +13,15 @@ public class Configuration {
 	public static final String KEY_LOGGING = "logging";
 	public static final String KEY_ACTIVE_DATA_COLLECTION = "active.data.collection";
 	public static final String KEY_MAX_WIDTH_80 = "max.width.80";
-	
+	public static final String KEY_INVERT_MOUSE_WHEEL_SCROLLING = "mouse.wheel.inverted";
+
 	public static final int DEFAULT_ENTER_RESENDS = 1;
 	public static final int DEFAULT_COMMAND_REMAINS = 0;
 	public static final int DEFAULT_LOGGING = 1;
 	public static final int DEFAULT_ACTIVE_DATA_COLLECTION = 1;
 	public static final int DEFAULT_MAX_WIDTH_80 = 0;
-	
+	public static final int DEFAULT_INVERT_MOUSE_WHEEL_SCROLLING = 0;
+
 	Properties properties;
 	
 	public String getSetting(String key, String defaultValue) {
@@ -72,16 +74,6 @@ public class Configuration {
 			value = Integer.parseInt(getSetting(key));
 		} catch (Exception e) {
 			
-		}
-		return value;
-	}
-
-	public boolean getBoolean(String key, boolean defaultValue) {
-		boolean value = defaultValue;
-		try {
-			value = Boolean.parseBoolean(getSetting(key));
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return value;
 	}
