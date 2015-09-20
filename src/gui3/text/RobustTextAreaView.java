@@ -334,8 +334,33 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 	}
 	
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		Point clickPoint = getTextRelativePoint(arg0.getPoint(), false);
+		Iterator it = document.lines(clickPoint.y, -1);
+		if (it.hasNext()) {
+			BetterTextAreaDocumentLine line = (BetterTextAreaDocumentLine) it.next();
+			String text = new String(document.getBuffer(), line.offset, line.length);
+			int left = clickPoint.x;
+			int right = clickPoint.x;
+			System.out.println(text);
+			while(left >= text.length()) {
+				left--;
+				right--;
+			}
+			while(left > 0 && text.charAt(left-1) != ' ' && text.charAt(left-1) != '"') {
+				left--;
+			}
+			while(right < text.length()-1 && text.charAt(left-1) != ' ' && text.charAt(left-1) != '"') {
+				right++;
+			}
+			if (right > left && (text.charAt(right-1) == '.' || text.charAt(right-1) == ',' || text.charAt(right-1) == '!' || text.charAt(right-1) == '?')) {
+				// don't include punctuation on the right hand side (makes copying URLs work better)
+				right--;
+			}
+			selectStart = new Point(left, clickPoint.y);
+			selectEnd = new Point(right, clickPoint.y);
+			repaint();
+			copySelection();
+		}
 	}
 
 	public void mouseEntered(MouseEvent arg0) {

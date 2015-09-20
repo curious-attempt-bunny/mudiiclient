@@ -1,9 +1,9 @@
 next --
 
-Right align the reset time in the status bar.
+Clicking now selects the word (or web site link) and copies it to the clipboard.
 Add mouse wheel scrolling (which works for Mac track pad scrolling also).
 Added configuration support for inverting the mouse wheel scroll direction.
-
+Right aligned the reset time in the status bar.
 
 v1.6.0
 

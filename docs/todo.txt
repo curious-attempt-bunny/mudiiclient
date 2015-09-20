@@ -3,7 +3,6 @@ Prioritized:
 * highlight critical stamina, and magic
 
 Unprioritized:
-* double click to select a word for copying to the clipboard -- auto-copy?
 * add bonus str dex sta to status bar
 * assume stamina and magic gains when asleep, and in the tea room
 * show when disconnected
