@@ -92,6 +92,7 @@ public class Launcher {
 		SnoopHandler snoopHandler = new SnoopHandler();
 		CommandHistory commandHistory = new CommandHistory();
 		loginHandler = new BasicLoginFacade();
+		loginHandler.setConfiguration(configuration);
 		
 		CommandSender uiCommandSender;
 		

@@ -1,5 +1,6 @@
 package gui3.login;
 
+import domain.Configuration;
 import gui3.ComponentWrapper;
 import backend2.CommandSender;
 import backend2.SimpleLoginTrigger;
@@ -8,11 +9,12 @@ public class LoginStateMachineBuilder {
 
 	private CommandSender commandSender;
 	private ComponentWrapper hostComponent;
+	private Configuration configuration;
 	
 	public FiniteStateMachine build(LoginDetails loginDetails) {
 		FiniteStateMachine finiteStateMachine = new FiniteStateMachine();
 
-		StateTransition transitionEnterClientMode = createTransition("Option", "/F\r/M1\ry", LoginFacade.STATE_END);
+		StateTransition transitionEnterClientMode = createTransition("Option", "/F\r/M1\ry", LoginFacade.AUTO_PLAY);
 		StateTransition transitionFinishNews = createTransition("Hit return.", "", LoginFacade.STATE_POST_NEWS);
 		StateTransition transitionSkipNews = createTransition("Skip the rest\\? \\(y/n\\)", "n", LoginFacade.STATE_POST_SKIP_NEWS_ITEM);
 		StateTransition transitionAccountPassword = createTransition("Account ID:", loginDetails.getAccountUser(), LoginFacade.STATE_POST_ACCOUNT_USER);
@@ -41,6 +43,10 @@ public class LoginStateMachineBuilder {
 		finiteStateMachine.addTransition(LoginFacade.STATE_POST_SKIP_NEWS_ITEM, transitionEnterClientMode);
 
 		finiteStateMachine.addTransition(LoginFacade.STATE_POST_NEWS, transitionEnterClientMode);
+
+		if (configuration.getInt(Configuration.KEY_AUTO_PLAY, Configuration.DEFAULT_AUTO_PLAY) == 1) {
+			finiteStateMachine.addTransition(LoginFacade.AUTO_PLAY, createTransition("Option", "p", LoginFacade.STATE_END));
+		}
 	
 		return finiteStateMachine;
 	}
@@ -57,4 +63,7 @@ public class LoginStateMachineBuilder {
 		this.hostComponent = hostComponent;
 	}
 
+	public void setConfiguration(Configuration configuration) {
+		this.configuration = configuration;
+	}
 }

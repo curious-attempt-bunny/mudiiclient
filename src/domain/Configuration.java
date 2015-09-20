@@ -14,6 +14,7 @@ public class Configuration {
 	public static final String KEY_ACTIVE_DATA_COLLECTION = "active.data.collection";
 	public static final String KEY_MAX_WIDTH_80 = "max.width.80";
 	public static final String KEY_INVERT_MOUSE_WHEEL_SCROLLING = "mouse.wheel.inverted";
+	public static final String KEY_AUTO_PLAY = "auto.play";
 
 	public static final int DEFAULT_ENTER_RESENDS = 1;
 	public static final int DEFAULT_COMMAND_REMAINS = 0;
@@ -21,6 +22,7 @@ public class Configuration {
 	public static final int DEFAULT_ACTIVE_DATA_COLLECTION = 1;
 	public static final int DEFAULT_MAX_WIDTH_80 = 0;
 	public static final int DEFAULT_INVERT_MOUSE_WHEEL_SCROLLING = 0;
+	public static final int DEFAULT_AUTO_PLAY = 1;
 
 	Properties properties;
 	

@@ -1,5 +1,6 @@
 package gui3.login;
 
+import domain.Configuration;
 import gui3.ComponentWrapper;
 
 import java.util.Iterator;
@@ -20,6 +21,7 @@ public class BasicLoginFacade implements LoginFacade {
 	private List loginListeners;
 	private FiniteStateMachine finiteStateMachine;
 	private LoginStateMachineBuilder loginStateMachineBuilder;
+	private Configuration configuration;
 
 	public BasicLoginFacade() {
 		loginListeners = new Vector();
@@ -76,6 +78,7 @@ public class BasicLoginFacade implements LoginFacade {
 	public void login() {
 		loginStateMachineBuilder.setCommandSender(inputOutput);
 		loginStateMachineBuilder.setHostComponent(hostComponent);
+		loginStateMachineBuilder.setConfiguration(configuration);
 		
 		LoginDetails loginDetails = new LoginDetails();
 		loginDetails.setAccountPassword(accountPassword);
@@ -117,5 +120,9 @@ public class BasicLoginFacade implements LoginFacade {
 	public void setLoginStateMachineBuilder(
 			LoginStateMachineBuilder loginStateMachineBuilder) {
 		this.loginStateMachineBuilder = loginStateMachineBuilder;
+	}
+
+	public void setConfiguration(Configuration configuration) {
+		this.configuration = configuration;
 	}
 }

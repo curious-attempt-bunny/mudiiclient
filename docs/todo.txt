@@ -1,6 +1,5 @@
 Prioritized:
 * implement snoop split screens
-* highlight critical stamina, and magic
 
 Unprioritized:
 * add bonus str dex sta to status bar

@@ -1,5 +1,6 @@
 package gui3.login;
 
+import domain.Configuration;
 import gui3.ComponentWrapper;
 import backend2.InputOutput;
 import backend2.OutputListener;
@@ -26,6 +27,8 @@ public interface LoginFacade extends OutputListener {
 
 	String STATE_POST_NEWS = "Done reading news...";
 
+	String AUTO_PLAY = "Auto play...";
+
 	void setHostComponent(ComponentWrapper parent);
 
 	void setSystemUser(String systemUser);
@@ -44,4 +47,5 @@ public interface LoginFacade extends OutputListener {
 
 	void addLoginListener(LoginListener loginListener);
 
+	void setConfiguration(Configuration configuration);
 }
