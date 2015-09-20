@@ -41,6 +41,7 @@ public class StatusBar extends JPanel {
 		private final String smallText;
 		private final int smallOffset;
 		private final int smallLength;
+		public boolean emphasize;
 
 		StatusBarItem(String text, int offset, int length, Color color, String smallText, int smallOffset, int smallLength) {
 			this.text = text;
@@ -169,16 +170,23 @@ public class StatusBar extends JPanel {
 					// right-align the last item
 					offset = Math.max(offset, (int)((size.getWidth() - 2*MARGIN)/fontWidth) - text.length());
 				}
-				g.setColor(items[i].color);
+				if (items[i].emphasize) {
+					g.setColor(items[i].color);
+					g.fillRect(MARGIN + offset*fontWidth, MARGIN, text.length()*fontWidth, fontHeight);
+					g.setColor(new Color(0, 0, 0));
+				} else {
+					g.setColor(items[i].color);
+				}
 				g.drawString(text, MARGIN + offset*fontWidth, MARGIN + fontAscent);
 			}
 		}
 	}
 	
-	public void setItem(String key, Color color, String text) {
+	public void setItem(String key, Color color, String text, boolean emphasize) {
 		Integer index = (Integer)mapKeyToIndex.get(key);
 		if (index != null) {
 			items[index.intValue()].color = color;
+			items[index.intValue()].emphasize = emphasize;
 			while(text.length() < items[index.intValue()].length) {
 				text = " " + text;
 			}

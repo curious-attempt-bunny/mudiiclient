@@ -98,7 +98,8 @@ public class StatusBarWrapper implements ComponentWrapper, StateListener,
 			} else {
 				component.setVisible(false);
 			}
-		} else { 
+		} else {
+			boolean emphasize = false;
 			String text = (value == null ? "" : value.toString());
 			if (key == State.KEY_POINTS && text.length() > 3) {
 				text = text.substring(0, text.length() - 3) + ","
@@ -111,6 +112,9 @@ public class StatusBarWrapper implements ComponentWrapper, StateListener,
 				if (isEffectiveKey(key)) {
 					int ratio = getRatioForKey(key, (Integer) value);
 					colour = getColorForRatio(ratio);
+					if (!(key == State.KEY_MAGIC && ((Integer)value).intValue() == 0)) {
+						emphasize = getEmphasisForRatio(ratio);
+					}
 				} else {
 					colour = color100;
 					if (key == State.KEY_STAMINA_MAX) {
@@ -125,6 +129,7 @@ public class StatusBarWrapper implements ComponentWrapper, StateListener,
 					if (key == State.KEY_RESET_TIME) {
 						if (value != null && ((Integer)value).intValue() <= 6) {
 							colour = color0;
+							emphasize = true;
 						} else {
 							colour = resetColour;
 						}
@@ -161,7 +166,7 @@ public class StatusBarWrapper implements ComponentWrapper, StateListener,
 				text = (String) value;
 			}
 
-			component.setItem(key, colour, text);
+			component.setItem(key, colour, text, emphasize);
 			component.repaint();
 		}
 	}
@@ -195,6 +200,10 @@ public class StatusBarWrapper implements ComponentWrapper, StateListener,
 			colour = color0;
 		}
 		return colour;
+	}
+
+	private boolean getEmphasisForRatio(int ratio) {
+		return (ratio <= 36);
 	}
 
 	private int getRatioForKey(String key, Integer value) {
