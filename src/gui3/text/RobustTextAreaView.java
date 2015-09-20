@@ -341,7 +341,6 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 			String text = new String(document.getBuffer(), line.offset, line.length);
 			int left = clickPoint.x;
 			int right = clickPoint.x;
-			System.out.println(text);
 			while(left >= text.length()) {
 				left--;
 				right--;
@@ -349,7 +348,7 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 			while(left > 0 && text.charAt(left-1) != ' ' && text.charAt(left-1) != '"') {
 				left--;
 			}
-			while(right < text.length()-1 && text.charAt(left-1) != ' ' && text.charAt(left-1) != '"') {
+			while(right < text.length()-1 && text.charAt(right) != ' ' && text.charAt(right) != '"') {
 				right++;
 			}
 			if (right > left && (text.charAt(right-1) == '.' || text.charAt(right-1) == ',' || text.charAt(right-1) == '!' || text.charAt(right-1) == '?')) {
