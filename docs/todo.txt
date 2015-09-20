@@ -6,4 +6,3 @@ Unprioritized:
 * assume stamina and magic gains when asleep, and in the tea room
 * show when disconnected
 * allow a way to reconnect
-* auto-play on connection

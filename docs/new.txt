@@ -1,9 +1,11 @@
-next --
+v1.6.1
 
-Highlight critical stamina and magic in the status bar.
-Clicking now selects the word (or web site link) and copies it to the clipboard.
-Add mouse wheel scrolling (which works for Mac track pad scrolling also).
+Critical stamina and magic are now emphasized in the status bar.
+Added autoplay on login.
+Added configuration to turn off autoplay on login.
+Added mouse wheel scrolling (which works for Mac track pad scrolling also).
 Added configuration support for inverting the mouse wheel scroll direction.
+Clicking now selects the word (or web site link) and copies it to the clipboard.
 Right aligned the reset time in the status bar.
 
 v1.6.0
