@@ -1,10 +1,6 @@
 package gui3;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -143,6 +139,10 @@ public class StatusBar extends JPanel {
 	}
 	
 	public void paint(Graphics g) {
+		((Graphics2D)g).setRenderingHint(
+				RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
 		g.setFont(font);
 		if (isFontChanged) {
 			FontMetrics fontMetrics = g.getFontMetrics();
