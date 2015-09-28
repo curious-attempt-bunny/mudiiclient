@@ -1,3 +1,10 @@
+v1.6.2
+
+Switched from mediocre Java font to Courier in bold (when available).
+Applied anti-aliasing to the status bar text too.
+Made the default dark-blue text colour easier to read on a black background.
+Corrected enabling/disabling of login fields when mudguest is selected.
+
 v1.6.1
 
 Critical stamina and magic are now emphasized in the status bar.

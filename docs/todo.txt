@@ -2,6 +2,8 @@ Prioritized:
 * implement snoop split screens
 
 Unprioritized:
+* logs split by reset
+* logs split by person snooped
 * add bonus str dex sta to status bar
 * assume stamina and magic gains when asleep, and in the tea room
 * show when disconnected
