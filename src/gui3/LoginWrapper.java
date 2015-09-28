@@ -17,7 +17,6 @@ import javax.swing.event.AncestorListener;
 
 import backend2.BareBonesBrowserLaunch;
 import domain.Configuration;
-import javafx.scene.input.KeyCode;
 
 public class LoginWrapper implements ComponentWrapper {
 	private Color fg = new Color(0xff,0xbb, 0x3f);
@@ -33,6 +32,8 @@ public class LoginWrapper implements ComponentWrapper {
 	private Configuration configuration;
 	private String host;
 	private JLabel systemPasswordLabel;
+	private JLabel accountUserLabel;
+	private JLabel accountPasswordLabel;
 
 	public void setHost(String host) {
 		this.host = host;
@@ -101,7 +102,7 @@ public class LoginWrapper implements ComponentWrapper {
 			}
 
 			public void keyPressed(KeyEvent e) {
-				updateSystemPasswordEnabledState();
+				updateEnabledState();
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					loginAction();
 				}
@@ -114,7 +115,7 @@ public class LoginWrapper implements ComponentWrapper {
 		});
 		systemUser.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				updateSystemPasswordEnabledState();
+				updateEnabledState();
 			}
 		});
 //		systemUser.addActionListener(loginActionListener);
@@ -133,7 +134,8 @@ public class LoginWrapper implements ComponentWrapper {
 
 		c.gridx=3;
 		c.gridy=y;
-		component.add(createLabel("Account ID:"), c);
+		accountUserLabel = createLabel("Account ID:");
+		component.add(accountUserLabel, c);
 		
 		c.gridx=4;
 		c.gridy=y++;
@@ -143,7 +145,8 @@ public class LoginWrapper implements ComponentWrapper {
 		
 		c.gridx=3;
 		c.gridy=y;
-		component.add(createLabel("Password:"), c);
+		accountPasswordLabel = createLabel("Password:");
+		component.add(accountPasswordLabel, c);
 		
 		c.gridx=4;
 		c.gridy=y++;
@@ -193,15 +196,27 @@ public class LoginWrapper implements ComponentWrapper {
 			}
 		});
 
-		updateSystemPasswordEnabledState();
+		updateEnabledState();
 	}
 
-	private void updateSystemPasswordEnabledState() {
+	private void updateEnabledState() {
 		String sysUser = getSystemUser();
 		boolean enabled = !(sysUser.equals("mud") || sysUser.equals("mudguest"));
 		systemPassword.setEnabled(enabled);
 		systemPasswordLabel.setEnabled(enabled);
-		highlightComponent(systemPassword, false);
+		if (!enabled) {
+			highlightComponent(systemPassword, false);
+		}
+
+		enabled = !sysUser.equals("mudguest");
+		accountUserLabel.setEnabled(enabled);
+		accountUser.setEnabled(enabled);
+		accountPasswordLabel.setEnabled(enabled);
+		accountPassword.setEnabled(enabled);
+		if (!enabled) {
+			highlightComponent(accountUser, false);
+			highlightComponent(accountPassword, false);
+		}
 	}
 
 	private String unscramble(String str) {
