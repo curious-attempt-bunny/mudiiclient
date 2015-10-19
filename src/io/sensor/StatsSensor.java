@@ -34,7 +34,11 @@ public class StatsSensor implements Sensor, ObservableState {
 	private static final int STATE_GAME_MODE_TOGGLE = 13;
 
 	private static final int STATE_ROOM_SHORT_NAME = 14;
-	
+
+	private static final int STATE_MAGICALLY_ENHANCED = 15;
+
+	private static final int STATE_MAGICALLY_UNENHANCED = 16;
+
 	private int state = STATE_NONE;
 
 	private int nesting = 0;
@@ -112,6 +116,12 @@ public class StatsSensor implements Sensor, ObservableState {
 			} else if (code.equals("<1101>")) {
 				state = STATE_MAGICALLY_GOOD;
 				nesting = 1;
+			} else if (code.equals("<1102>")) {
+				state = STATE_MAGICALLY_ENHANCED;
+				nesting = 1;
+			} else if (code.equals("<1103>")) {
+				state = STATE_MAGICALLY_UNENHANCED;
+				nesting = 1;
 			} else if (code.equals("<1120>")) {
 				state = STATE_PHYSICALLY_BAD;
 				nesting = 1;
@@ -133,6 +143,9 @@ public class StatsSensor implements Sensor, ObservableState {
 				fireOnState(State.KEY_CRIPPLED, Boolean.FALSE);
 				fireOnState(State.KEY_DEAF, Boolean.FALSE);
 				fireOnState(State.KEY_DUMB, Boolean.FALSE);
+				fireOnState(State.KEY_BONUS_DEXTERITY, Boolean.FALSE);
+				fireOnState(State.KEY_BONUS_STRENGTH, Boolean.FALSE);
+				fireOnState(State.KEY_BONUS_STAMINA, Boolean.FALSE);
 				fireOnState(State.KEY_ROOM_SHORT_NAME, null);
 				
 				state = STATE_GAME_MODE_TOGGLE;
@@ -362,6 +375,24 @@ public class StatsSensor implements Sensor, ObservableState {
 				} else if (text.endsWith("sight!")) {
 					fireOnState(State.KEY_BLIND, Boolean.FALSE);
 				}
+			}
+		} else if (state == STATE_MAGICALLY_ENHANCED) {
+			if (text.startsWith("You ")) {
+				if (text.endsWith("become more adroit!")) {
+					fireOnState(State.KEY_BONUS_DEXTERITY, Boolean.TRUE);
+				} else if (text.endsWith("become stronger!")) {
+					fireOnState(State.KEY_BONUS_STRENGTH, Boolean.TRUE);
+				} else if (text.endsWith("become fitter!")) {
+					fireOnState(State.KEY_BONUS_STAMINA, Boolean.TRUE);
+				}
+			}
+		} else if (state == STATE_MAGICALLY_UNENHANCED) {
+			if (text.equals("Your magical dexterity has worn off.")) {
+				fireOnState(State.KEY_BONUS_DEXTERITY, Boolean.FALSE);
+			} else if (text.equals("Your magical strength has worn off.")) {
+				fireOnState(State.KEY_BONUS_STRENGTH, Boolean.FALSE);
+			} else if (text.endsWith("Your magical fitness has worn off.")) {
+				fireOnState(State.KEY_BONUS_STAMINA, Boolean.FALSE);
 			}
 		} else if (state == STATE_DOCUMENT_READ) {
 			if (text.startsWith("The chart tells")) {

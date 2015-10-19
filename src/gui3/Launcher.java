@@ -85,7 +85,6 @@ public class Launcher {
 		FontManager fontManager = new FontManager();
 		Configuration configuration = new Configuration();
 		
-//		InputOutput io = new OldInputOutput();
 		io = new RobustInputOutput();
 		TriggerConfiguration triggerConfiguration = new TriggerConfiguration();
 		FesSender fesSender = new FesSender();

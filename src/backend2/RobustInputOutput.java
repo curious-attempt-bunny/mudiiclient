@@ -202,16 +202,31 @@ public class RobustInputOutput implements InputOutput {
 		fireOutput(code);
 	}
 
-	public void addTrigger(String trigger, String text) {
-		addTrigger(trigger, text.getBytes());
-	}
-
-	public void addTrigger(String trigger, final byte[] bs) {
+	public void addTrigger(String trigger, final String[] text) {
 		mudClientFilter.addTextListener(new Trigger(trigger, new TriggerAction() {
 			public void onTrigger() {
-				send(bs);
+				for(int i = 0; i<text.length; i++) {
+					String response = text[i];
+					if (i == 0) {
+						send(response);
+					} else {
+						final int j = i;
+						final String toSend = response;
+						new Thread(new Runnable() {
+							public void run() {
+								try {
+									Thread.sleep(500 * j);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+								send(toSend);
+							}
+						}).start();
+					}
+				}
 			}
 		}));
 	}
+
 
 }

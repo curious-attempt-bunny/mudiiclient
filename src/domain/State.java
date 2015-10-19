@@ -35,6 +35,12 @@ public class State implements StateListener {
 
 	public static final String KEY_BLIND = "BLIND";
 
+	public static final String KEY_BONUS_STRENGTH = "BONUS_STRENGTH";
+
+	public static final String KEY_BONUS_DEXTERITY = "BONUS_DEXTERITY";
+
+	public static final String KEY_BONUS_STAMINA = "BONUS_STAMINA";
+
 	public static final String KEY_WEATHER = "WEATHER";
 
 	public static final String KEY_PLAYING = "PLAYING";

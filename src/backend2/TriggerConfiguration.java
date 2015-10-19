@@ -36,8 +36,7 @@ public class TriggerConfiguration {
 						String text = line.substring(line.indexOf("=") + 1)
 								.trim();
 
-						triggerHandler.addTrigger(".*" + trigger + ".*", text
-								+ "\r");
+						triggerHandler.addTrigger(".*" + trigger + ".*", new String[] { text + "\r" });
 					}
 				}
 			} catch (Exception e) {
