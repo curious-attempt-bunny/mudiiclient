@@ -8,6 +8,7 @@ import domain.Configuration;
 import domain.State;
 
 public class FesSender implements CommandSender, StateListener {
+	public static final String FES = "\u001b-[fes\u001b-]";
 	private CommandSender commandSender;
 	private long timeLastSentFes = 0;
 	private boolean isFesEnable;
@@ -44,7 +45,7 @@ public class FesSender implements CommandSender, StateListener {
 
 	private void checkSendFes() {
 		if (isFesEnable && configuration.getInt(Configuration.KEY_ACTIVE_DATA_COLLECTION, Configuration.DEFAULT_ACTIVE_DATA_COLLECTION) == 1) {
-			commandSender.send("\u001b-[fes\u001b-]");
+			commandSender.send(FES);
 			timeLastSentFes = new Date().getTime();
 		}
 	}
