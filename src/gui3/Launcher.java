@@ -358,8 +358,10 @@ public class Launcher {
 	
 	public void run() {
 		loginWindowLayout.doLayout();
-		
-		mainFrame.show();
+
+		if (System.getProperty("headless", "false").equals("false")) {
+			mainFrame.show();
+		}
 		
 		if (System.getProperty("quicktest") != null) {
 			loginWrapper.loginAction(); 
