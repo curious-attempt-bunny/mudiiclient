@@ -15,7 +15,13 @@ public class LoginSuperseedUserPromptTransition extends StateTransition {
 	}
 
 	public String execute() {
-		int optionPane = JOptionPane.showConfirmDialog(hostComponent.getComponent(), "MUDII thinks you are already logged in.\nDo you want to log in and disconnect\nyour existing session?", "Already logged in", JOptionPane.OK_CANCEL_OPTION);
+		int optionPane;
+		if (System.getProperty("headless", "false").equals("false")) {
+			optionPane = JOptionPane.showConfirmDialog(hostComponent.getComponent(), "MUDII thinks you are already logged in.\nDo you want to log in and disconnect\nyour existing session?", "Already logged in", JOptionPane.OK_CANCEL_OPTION);
+		} else {
+			optionPane = JOptionPane.OK_OPTION;
+		}
+
 		if (optionPane == JOptionPane.OK_OPTION) {
 			commandSender.send("y\r");
 			return LoginFacade.STATE_POST_ACCOUNT_PASSWORD;

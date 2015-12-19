@@ -50,6 +50,8 @@ public class Launcher {
 	private RobustInputOutput io;
 
 	private LoginWrapper loginWrapper;
+	private Configuration configuration;
+	private String host;
 
 	public void init() {
 		boolean isCommandHistoryEnabled = false;
@@ -83,7 +85,7 @@ public class Launcher {
 		FocusRetargetter focusRetargetter1 = new FocusRetargetter();
 		FocusRetargetter focusRetargetter2 = new FocusRetargetter();
 		FontManager fontManager = new FontManager();
-		Configuration configuration = new Configuration();
+		configuration = new Configuration();
 		
 		io = new RobustInputOutput();
 		TriggerConfiguration triggerConfiguration = new TriggerConfiguration();
@@ -137,7 +139,8 @@ public class Launcher {
 
 		// ------- setters
 
-		io.setHost(System.getProperty("host", "mudii.co.uk"));
+		host = System.getProperty("host", "mudii.co.uk");
+		io.setHost(host);
 		io.setTelnetProtocolHandler(telnetProtocolHandler);
 		io.setMudClientFilter(mudClientFilter);
 		if (System.getProperty("debug") != null) {
@@ -166,10 +169,12 @@ public class Launcher {
 		textSanitizer.addTextListener(statsSensor);
 		textSanitizer.addCodeListener(statsSensor);
 		statsSensor.addStateListener(state);
-		
-		io.addOutputListener(snoopHandler);
-		mudClientProtocolHandler.addCodeListener(snoopHandler);
-		
+
+		if (System.getProperty("headless", "false").equals("false")) {
+			io.addOutputListener(snoopHandler);
+			mudClientProtocolHandler.addCodeListener(snoopHandler);
+		}
+
 		telnetProtocolHandler.addBytesListener(ansiProtocolHandler);
 		ansiProtocolHandler.addBytesListener(mudClientProtocolHandler);
 		mudClientProtocolHandler.addCodeListener(mudClientFilter);
@@ -276,8 +281,10 @@ public class Launcher {
 		if (isCommandHistoryEnabled) {
 			prompt.setFunctionKeyStore(quickKeyWrapper);
 		}
-		playerSensor.addPlayerSensor(prompt);
-		state.addStateListener(prompt);
+		if (System.getProperty("headless", "false").equals("false")) {
+			playerSensor.addPlayerSensor(prompt);
+			state.addStateListener(prompt);
+		}
 		
 		fontManager.addFontConsumer(prompt);
 		
@@ -313,31 +320,40 @@ public class Launcher {
 
 		// ------- initialisers
 
-		mainFrame.init();
-		statusBar.init();
-		if (isCommandHistoryEnabled) {
-			quickKeyWrapper.init();
+		if (System.getProperty("headless", "false").equals("false")) {
+
+			mainFrame.init();
+			statusBar.init();
+			if (isCommandHistoryEnabled) {
+				quickKeyWrapper.init();
+			}
+			scrollback.init();
+			mainText.init();
+
+			northPanel.init();
+			centerPanel.init();
+			southPanel.init();
+			scrollbackController.init();
+
+			scrollbarWrapper.init();
+
+			prompt.init();
+			configurationWrapper.init();
+
+			loginWrapper.init();
+
+			focusRetargetter0.init();
+			focusRetargetter1.init();
+			focusRetargetter2.init();
+
+			fontManager.init();
+
+			configurationFrame.init();
+
+			if (isCommandHistoryEnabled) {
+				commandHistory.init();
+			}
 		}
-		scrollback.init();
-		mainText.init();
-		
-		northPanel.init();
-		centerPanel.init();
-		southPanel.init();
-		scrollbackController.init();
-		
-		scrollbarWrapper.init();
-		
-		prompt.init();
-		configurationWrapper.init();
-		
-		loginWrapper.init();
-		
-		focusRetargetter0.init();
-		focusRetargetter1.init();
-		focusRetargetter2.init();
-		
-		fontManager.init();
 		
 		if (configuration.getInt(Configuration.KEY_LOGGING, Configuration.DEFAULT_LOGGING) == 1) {
 			logger.init();
@@ -346,25 +362,27 @@ public class Launcher {
 		io.init();
 		
 		triggerConfiguration.init();
-		
-		configurationFrame.init();		
-		
-		if (isCommandHistoryEnabled) {
-			commandHistory.init();
-		}
 
 		mausoleumPuzzleSensor.init();
 	}
 	
 	public void run() {
-		loginWindowLayout.doLayout();
-
 		if (System.getProperty("headless", "false").equals("false")) {
+			loginWindowLayout.doLayout();
+
 			mainFrame.show();
 		}
 		
 		if (System.getProperty("quicktest") != null) {
-			loginWrapper.loginAction(); 
+			if (System.getProperty("headless", "false").equals("false")) {
+				loginWrapper.loginAction();
+			} else {
+				loginHandler.setSystemUser(configuration.getSetting(host + ".system.user", "mud"));
+				loginHandler.setSystemPassword(configuration.getSetting(host + ".system.password", ""));
+				loginHandler.setAccountUser(configuration.getSetting(host+".account.user", ""));
+				loginHandler.setAccountPassword(configuration.getSetting(host+".account.password", ""));
+				loginHandler.login();
+			}
 		}
 	}
 
