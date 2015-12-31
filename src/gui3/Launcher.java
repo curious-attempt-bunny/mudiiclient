@@ -52,6 +52,7 @@ public class Launcher {
 	private LoginWrapper loginWrapper;
 	private Configuration configuration;
 	private String host;
+	private Logger logger;
 
 	public void init() {
 		boolean isCommandHistoryEnabled = false;
@@ -113,7 +114,7 @@ public class Launcher {
 		StatsSensor statsSensor = new StatsSensor();
 		PlayerSensor playerSensor = new PlayerSensor();
 		
-		Logger logger = new HtmlLogger();
+		logger = new HtmlLogger();
 		statsSensor.addStateListener((StateListener) logger);
 		
 		ConfigurationWindowWrapper configurationFrame = new ConfigurationWindowWrapper();
@@ -411,5 +412,9 @@ public class Launcher {
 
 	public InputOutput getInputOutput() {
 		return io;
+	}
+
+	public Logger getLogger() {
+		return logger;
 	}
 }
