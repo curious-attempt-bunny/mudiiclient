@@ -189,8 +189,8 @@ public class Launcher {
 		textSanitizer.addCodeListener(playerSensor);
 		
 		if (configuration.getInt(Configuration.KEY_LOGGING, Configuration.DEFAULT_LOGGING) == 1) {
-			String date = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss").format(new Date());
-			logger.setFilename(date+".html");
+			String date = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
+			logger.setFilename(date+"-"+host+".html");
 			logger.setColourHelper(colourHelper);
 			mudClientFilter.addTextListener(logger);
 			mudClientFilter.addCodeListener(logger);
