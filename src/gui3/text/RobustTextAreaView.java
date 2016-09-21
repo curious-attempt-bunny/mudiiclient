@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 
 import domain.Configuration;
 import domain.Style;
+import io.sensor.PlanSensor;
 
 public class RobustTextAreaView extends JPanel implements MouseListener, MouseMotionListener, DocumentListener, ClipboardOwner, TextView, MouseWheelListener {
 
@@ -51,6 +52,8 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 
 	private List viewListeners;
 	private ScrollbackController scrollbackController;
+
+	private PlanSensor plan;
 
 	public RobustTextAreaView(ColourHelper colourHelper, BetterTextAreaDocument document, ScrollbackController scrollbackController) {
 		this.colourHelper = colourHelper;
@@ -115,6 +118,36 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 		}
 		
 		paintSelection(gc);
+
+		paintPlan(gc);
+	}
+
+	public void paintPlan(Graphics gc) {
+		if (plan != null) {
+			List labels = plan.getLabels();
+
+			if (labels.size() > 0) {
+				int top = 50;
+				int right = (int) (getSize().getWidth() - 2*fontWidth);
+				int left = (int) (getSize().getWidth() - ("abcdef12".length() * fontWidth) - 3*2);
+				int bottom = top + (fontHeight * labels.size()) + 3*2;
+				int width = right - left;
+				int height = bottom - top;
+
+				gc.setColor(new Color(0,0,0));
+				gc.fillRect(left, top, width, height);
+				gc.setColor(new Color(127, 127, 127));
+				gc.drawRect(left, top, width, height);
+				gc.setColor(new Color(255,255,255));
+
+				Iterator iterator = labels.iterator();
+				while(iterator.hasNext()) {
+					String label = (String) iterator.next();
+					gc.drawBytes(label.getBytes(), 0, label.length(), left+3, top+3+fontHeight-fontDescent);
+					top += fontHeight;
+				}
+			}
+		}
 	}
 
 	private void paintSelection(Graphics gc) {
@@ -470,5 +503,9 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 	public void lostOwnership(Clipboard clipboard, Transferable contents) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void setPlan(PlanSensor plan) {
+		this.plan = plan;
 	}
 }

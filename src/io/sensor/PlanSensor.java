@@ -22,27 +22,26 @@ public class PlanSensor implements TextListener {
             String name = (String)names.nextElement();
             String alternates = configuration.getSetting(name);
 
-            String[] parts = name.split("|");
+            String[] parts = name.split("\\|");
             if (parts[0].equals("plan")) {
                 int index = Integer.parseInt(parts[1]);
                 String label = parts[2];
 
                 String[] objectNames = new String[] { label };
                 if (!alternates.trim().isEmpty()) {
-                    objectNames = alternates.split("|");
+                    objectNames = alternates.split("\\|");
                 }
 
                 for(int i=0; i<objectNames.length; i++) {
                     objectNameToIndex.put(objectNames[i], new Integer(index));
                 }
                 labels[index] = label;
-                remainingLabels.add(label);
             }
+        }
 
-            for(int i=0; i<labels.length; i++) {
-                if (labels[i] != null) {
-                    remainingLabels.add(labels[i]);
-                }
+        for(int i=0; i<labels.length; i++) {
+            if (labels[i] != null) {
+                remainingLabels.add(labels[i]);
             }
         }
     }
@@ -50,7 +49,7 @@ public class PlanSensor implements TextListener {
     public void onText(String text) {
         text = text.trim();
         if (text.endsWith("taken.")) {
-            String[] words = text.split(" ");
+            String[] words = text.toLowerCase().split(" ");
             for(int i=0; i<words.length; i++) {
                 if (objectNameToIndex.containsKey(words[i])) {
                     int index = ((Integer)objectNameToIndex.get(words[i])).intValue();
@@ -75,5 +74,14 @@ public class PlanSensor implements TextListener {
 
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
+    }
+
+    public List getLabels() {
+        List render = new ArrayList();
+        Iterator iterator = remainingLabels.iterator();
+        for(int i = 0; i<10 && iterator.hasNext(); i++) {
+            render.add(iterator.next());
+        }
+        return render;
     }
 }

@@ -6,11 +6,7 @@ import gui3.layout.WindowLayout;
 import gui3.login.LoginFacade;
 import gui3.login.BasicLoginFacade;
 import gui3.login.LoginListener;
-import gui3.text.BetterTextAreaDocument;
-import gui3.text.ScrollbackController;
-import gui3.text.ScrollbarWrapper;
-import gui3.text.SnoopHandler;
-import gui3.text.TextAreaWrapper;
+import gui3.text.*;
 import io.listener.StateListener;
 import io.protocol.impl.BasicANSIProtocolHandler;
 import io.protocol.impl.BasicMudClientFilter;
@@ -117,6 +113,9 @@ public class Launcher {
 		SyncSensor syncSensor = new SyncSensor();
 		syncSensor.setState(state);
 
+		PlanSensor planSensor = new PlanSensor();
+		planSensor.setConfiguration(configuration);
+
 		logger = new HtmlLogger();
 		statsSensor.addStateListener((StateListener) logger);
 		
@@ -176,6 +175,7 @@ public class Launcher {
 		textSanitizer.addTextListener(statsSensor);
 		textSanitizer.addCodeListener(statsSensor);
 		textSanitizer.addCodeListener(syncSensor);
+		textSanitizer.addTextListener(planSensor);
 
 		statsSensor.addStateListener(state);
 
@@ -233,7 +233,7 @@ public class Launcher {
 		loginWindowLayout.setMapIdToComponent(mapIdToComponent);
 				
 		mainFrame.setConfiguration(configuration);
-		
+
 //		northPanel.setParent(mainFrame);
 //		southPanel.setParent(mainFrame);
 		
@@ -262,6 +262,7 @@ public class Launcher {
 		//		mainText.setParent(mainFrame);
 		mainText.setDocument(textDocument);
 		mainText.setColourHelper(colourHelper);
+		mainText.setPlan(planSensor);
 //		io.addOutputListener(mainText);
 		snoopHandler.addOutputListener(mainText);
 		ansiProtocolHandler.addStyleListener(mainText);
@@ -328,6 +329,8 @@ public class Launcher {
 		mudClientFilter.addTextListener(lineDetector);
 
 		// ------- initialisers
+
+		planSensor.init();
 
 		if (System.getProperty("headless", "false").equals("false")) {
 

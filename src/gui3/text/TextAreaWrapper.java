@@ -12,6 +12,7 @@ import java.awt.Font;
 import backend2.OutputListener;
 import domain.Configuration;
 import domain.Style;
+import io.sensor.PlanSensor;
 
 public class TextAreaWrapper implements ComponentWrapper, OutputListener, StyleListener, FontConsumer, PrefixListener, StateListener {
 
@@ -21,6 +22,7 @@ public class TextAreaWrapper implements ComponentWrapper, OutputListener, StyleL
 	private BetterTextAreaDocument document;
 	private Configuration configuration;
 	private ScrollbackController scrollbackController;
+	private PlanSensor plan;
 
 	public void onState(String key, Object value) {
 
@@ -36,6 +38,7 @@ public class TextAreaWrapper implements ComponentWrapper, OutputListener, StyleL
 
 	public void init() {
 		component = new RobustTextAreaView(colourHelper, document, scrollbackController);
+		component.setPlan(plan);
 		component.setScrollback(isScrollback);
 		component.setConfiguration(configuration);
 	}
@@ -84,5 +87,9 @@ public class TextAreaWrapper implements ComponentWrapper, OutputListener, StyleL
 
 	public void setScrollbackController(ScrollbackController scrollbackController) {
 		this.scrollbackController = scrollbackController;
+	}
+
+	public void setPlan(PlanSensor plan) {
+		this.plan = plan;
 	}
 }
