@@ -187,7 +187,7 @@ public class Prompt implements ComponentWrapper, KeyListener, FontConsumer, Play
 			} else if (ch == 'D') {
 				onSendDreamword();
 				e.consume();
-			} else if (ch == 'X' || ch == 'C' || ch == 'V') {
+			} else if (ch == 'X' || ch == 'C' || ch == 'V' || ch == 'A') {
 				// clipboard
 			} else if (ch == '+' || ch == '=') {
 				fontManager.onFontBigger();
@@ -227,20 +227,22 @@ public class Prompt implements ComponentWrapper, KeyListener, FontConsumer, Play
 			commandHistoryIndex = 0;
 		}
 
-		component.setText(getHistoryCurrent());
-		component.setSelectionStart(0);
-		component.setSelectionEnd(getHistoryCurrent().length());
+		highlightCurrent();
 	}
 
 	protected void onHistoryPrevious() {
-		component.setText(getHistoryCurrent());
-		component.setSelectionStart(0);
-		component.setSelectionEnd(getHistoryCurrent().length());
+		highlightCurrent();
 		
 		commandHistoryIndex--;
 		if (commandHistoryIndex < 0) {
 			commandHistoryIndex = commandHistory.size()-1;
 		}
+	}
+
+	private void highlightCurrent() {
+		component.setText(getHistoryCurrent());
+		component.setSelectionStart(0);
+		component.setSelectionEnd(getHistoryCurrent().length());
 	}
 
 	public void sentCommand(String text) {
