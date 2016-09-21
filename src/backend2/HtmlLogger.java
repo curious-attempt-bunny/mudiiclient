@@ -126,6 +126,10 @@ public class HtmlLogger implements Logger, Runnable, StateListener {
 	}
 
 	public void onCode(String code) {
+		synchronized (appends) {
+			appends.add("<!-- " + code + " -->");
+			appends.notify();
+		}
 		if (code.length() > 2) {
 			nextCode = code.substring(1, code.length() - 1);
 		}
