@@ -113,7 +113,10 @@ public class Launcher {
 		state = new State();
 		StatsSensor statsSensor = new StatsSensor();
 		PlayerSensor playerSensor = new PlayerSensor();
-		
+
+		SyncSensor syncSensor = new SyncSensor();
+		syncSensor.setState(state);
+
 		logger = new HtmlLogger();
 		statsSensor.addStateListener((StateListener) logger);
 		
@@ -152,6 +155,9 @@ public class Launcher {
 		if (System.getProperty("debug") != null) {
 			mudClientFilter.addCodeListener(io);
 		}
+		if (configuration.getInt("sync", 0) != 0) {
+			state.addStateListener(io);
+		}
 		
 //		io.addTrigger(".*^EXAMINE>.*", "q\r");
 //		io.addTrigger(".*^Players:.*", "fes\r");
@@ -169,6 +175,8 @@ public class Launcher {
 		// initialise early so that we can detect PLAYING state and disable/enable output
 		textSanitizer.addTextListener(statsSensor);
 		textSanitizer.addCodeListener(statsSensor);
+		textSanitizer.addCodeListener(syncSensor);
+
 		statsSensor.addStateListener(state);
 
 		if (System.getProperty("headless", "false").equals("false")) {

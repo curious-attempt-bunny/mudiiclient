@@ -1,5 +1,7 @@
 package backend2;
 
+import domain.State;
+import io.listener.StateListener;
 import io.protocol.impl.BasicMudClientFilter;
 import io.protocol.impl.BasicTelnetProtocolHandler;
 import io.trigger.Trigger;
@@ -14,7 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-public class RobustInputOutput implements InputOutput {
+public class RobustInputOutput implements InputOutput, StateListener {
 
 	private List outputListeners;
 	private String host;
@@ -25,6 +27,7 @@ public class RobustInputOutput implements InputOutput {
 	private InputStream inputStream;
 	private boolean isConnected;
 	private List commands;
+	private Integer sync;
 
 	public RobustInputOutput() {
 		outputListeners = new Vector();
@@ -181,6 +184,24 @@ public class RobustInputOutput implements InputOutput {
 	}
 
 	public void send(byte[] bytes) {
+		if (sync != null) {
+			String cmd = new String(bytes);
+			// stallable?
+			if (cmd.trim().matches("(?im).*\\.[gk] [a-z0-9]+ f.*?\\..*")) {
+				// stall?
+				long now = System.currentTimeMillis();
+				int stallAmount = stallTime(sync.intValue(), now);
+				System.err.println("Sync "+sync+" now "+(now%2000)+" -> stall for "+stallAmount);
+				if (stallAmount > 0) {
+					try {
+						Thread.sleep(stallAmount);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
 //		if (outputStream == null) {
 //			//onDisconnected();
 //		} else {
@@ -197,6 +218,27 @@ public class RobustInputOutput implements InputOutput {
 		}
 	}
 
+	public static int stallTime(int sync, long now) {
+		if (sync < 700) {
+			sync += 700;
+			now += 700;
+		} else if (sync > 2000-50) {
+			sync -= 100;
+			now -= 100;
+		}
+
+		int normalized = (int)(now % 2000);
+		if (normalized >= sync) {
+			if (normalized - sync < 50) {
+				return 50 - (normalized - sync);
+			}
+		} else {
+			if (sync - normalized <= 700) {
+				return 50 + (sync - normalized);
+			}
+		}
+		return 0;
+	}
 
 	public void onCode(String code) {
 		fireOutput(code);
@@ -229,4 +271,9 @@ public class RobustInputOutput implements InputOutput {
 	}
 
 
+	public void onState(String key, Object value) {
+		if (key.equals(State.KEY_SYNC)) {
+			sync = (Integer)value;
+		}
+	}
 }

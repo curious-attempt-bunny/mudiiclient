@@ -52,7 +52,8 @@ public class State implements StateListener {
 	public static final String KEY_RESET_TIME = "RESET_TIME";
 
 	public static final String KEY_ROOM_SHORT_NAME = "ROOM_SHORT_NAME";
-	
+	public static final String KEY_SYNC = "SYNC";
+
 	private Map mapStateToValue;
 	private List stateListeners;
 
