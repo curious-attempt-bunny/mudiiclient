@@ -3,7 +3,8 @@ package domain;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Properties;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class Configuration {
 	private static final String FILENAME = "config.txt";
@@ -39,7 +40,19 @@ public class Configuration {
 
 	private void checkProperties() {
 		if (properties == null) {
-			properties = new Properties();
+			properties = new Properties() {
+				public Set entrySet() {
+					ArrayList sorted = new ArrayList(super.entrySet());
+					Collections.sort(sorted, new Comparator() {
+						public int compare(Object o1, Object o2) {
+							String key1 = (String) ((Map.Entry) o1).getKey();
+							String key2 = (String) ((Map.Entry) o2).getKey();
+							return key1.compareTo(key2);
+						}
+					});
+					return Collections.unmodifiableSet(new LinkedHashSet(sorted));
+				}
+			};
 			try {
 				properties.loadFromXML(new FileInputStream(FILENAME));
 			} catch (IOException e) {

@@ -30,32 +30,41 @@ public class CommandTransformer {
         Enumeration names = settings.propertyNames();
         while(names.hasMoreElements()) {
             String name = (String)names.nextElement();
-            if (name.startsWith("trigger")) {
-                String[] parts = name.split("\\|");
-                final String trigger = parts[1].replaceAll("([*{}?.+\\]])", "\\\\$1");
-                String macroAndValue = configuration.getSetting(name);
-                if (macroAndValue.indexOf("|") == -1) {
-                    final String triggerCommand = macroAndValue;
-                    lineDetector.addPatternMatcherAndHandler(trigger, new ElementHandler() {
-                        public void processElement(String element, String[] parts) {
-                            commandSender.send(triggerCommand+ "\r");
-                        }
-                    });
-                } else {
-                    parts = macroAndValue.split("\\|");
-                    final String macro = parts[0];
-                    final String value = parts[1];
-                    //                System.out.println("Trigger: "+trigger);
-                    //                triggerToMacroAndValue.put(parts[1], configuration.getSetting(name));
-                    lineDetector.addPatternMatcherAndHandler(trigger, new ElementHandler() {
-                        public void processElement(String element, String[] parts) {
-                            //                        System.out.println("Trigger fired: \"" + trigger + "\".");
-                            //                        System.out.println("Setting macro "+macro+" --> "+value);
+            String totalValue = configuration.getSetting(name);
+            String[] values = totalValue.split("#");
+            for(int i=0; i<values.length; i++) {
+                String value = values[i];
+                if (name.startsWith("trigger")) {
+                    String[] parts = name.split("\\|");
+                    final String trigger = parts[1].replaceAll("([*{}?.+\\]])", "\\\\$1");
+                    String macroAndValue = value;
+                    if (macroAndValue.indexOf("|") == -1) {
+                        final String triggerCommand = macroAndValue;
+                        lineDetector.addPatternMatcherAndHandler(trigger, new ElementHandler() {
+                            public void processElement(String element, String[] parts) {
+                                commandSender.send(triggerCommand + "\r");
+                            }
+                        });
+                    } else {
+                        parts = macroAndValue.split("\\|");
+                        final String macro = parts[0];
+                        final String val = parts[1];
+                        //                System.out.println("Trigger: "+trigger);
+                        //                triggerToMacroAndValue.put(parts[1], configuration.getSetting(name));
+                        lineDetector.addPatternMatcherAndHandler(trigger, new ElementHandler() {
+                            public void processElement(String element, String[] parts) {
+                                //                        System.out.println("Trigger fired: \"" + trigger + "\".");
+                                //                        System.out.println("Setting macro "+macro+" --> "+value);
 
-                            macroToValue.put(macro, value);
-                        }
-                    });
+                                macroToValue.put(macro, val);
+                            }
+                        });
+                    }
+                } else if (name.startsWith("macro")) {
+                    String macro = name.split("\\|")[1];
+                    macroToValue.put(macro, value);
                 }
+
             }
         }
     }
@@ -70,6 +79,15 @@ public class CommandTransformer {
         }
 
         String transformed = String.join(".", cmds);
+
+        // allows expanding "e." to something
+        Iterator iterator = macroToValue.entrySet().iterator();
+        while(iterator.hasNext()) {
+            Map.Entry macro = (Map.Entry) iterator.next();
+            if (transformed.endsWith((String) macro.getKey())) {
+                transformed = transformed.substring(0, transformed.lastIndexOf((String) macro.getKey())) + macro.getValue();
+            }
+        }
 
         return transformed;
     }
