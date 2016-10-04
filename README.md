@@ -2,7 +2,7 @@
 
 ## Getting setup
 
-Java is required for this program to run.
+[Java](https://www.java.com/) is required for this program to run.
 
 1. Download the [jar](http://mud2.net/mudiiclient/mudiiclient.jar).
 2. Double click the jar file to launch.
