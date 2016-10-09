@@ -175,6 +175,8 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 				}
 				gc.fillRect(MARGIN+x1*fontWidth, offset-(1+y-lineIndex)*fontHeight, (x2-x1)*fontWidth, fontHeight);
 			}
+
+			gc.setXORMode(new Color(0,0,0));
 		}
 	}
 
