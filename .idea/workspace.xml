@@ -280,9 +280,12 @@
       <file leaf-file-name="RobustTextAreaView.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/gui3/text/RobustTextAreaView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.72347265">
-              <caret line="178" column="44" selection-start-line="178" selection-start-column="44" selection-end-line="178" selection-end-column="44" />
-              <folding />
+            <state vertical-scroll-proportion="0.48231512">
+              <caret line="138" column="70" selection-start-line="138" selection-start-column="70" selection-end-line="138" selection-end-column="70" />
+              <folding>
+                <element signature="e#1901#1902#0" expanded="true" />
+                <element signature="e#1942#1943#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -1602,9 +1605,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/gui3/text/RobustTextAreaView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.72347265">
-          <caret line="178" column="44" selection-start-line="178" selection-start-column="44" selection-end-line="178" selection-end-column="44" />
-          <folding />
+        <state vertical-scroll-proportion="0.48231512">
+          <caret line="138" column="70" selection-start-line="138" selection-start-column="70" selection-end-line="138" selection-end-column="70" />
+          <folding>
+            <element signature="e#1901#1902#0" expanded="true" />
+            <element signature="e#1942#1943#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -127,9 +127,16 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 			List labels = plan.getLabels();
 
 			if (labels.size() > 0) {
-				int top = 50;
+				Iterator iterator = labels.iterator();
+				int maxLength = 0;
+				while(iterator.hasNext()) {
+					String label = (String) iterator.next();
+					maxLength = Math.max(maxLength, label.length());
+				}
+
+					int top = 50;
 				int right = (int) (getSize().getWidth() - 2*fontWidth);
-				int left = (int) (getSize().getWidth() - ("abcdef12".length() * fontWidth) - 3*2);
+				int left = (int) (getSize().getWidth() - ((maxLength+2) * fontWidth) - 3*2);
 				int bottom = top + (fontHeight * labels.size()) + 3*2;
 				int width = right - left;
 				int height = bottom - top;
@@ -140,7 +147,7 @@ public class RobustTextAreaView extends JPanel implements MouseListener, MouseMo
 				gc.drawRect(left, top, width, height);
 				gc.setColor(new Color(255,255,255));
 
-				Iterator iterator = labels.iterator();
+				iterator = labels.iterator();
 				while(iterator.hasNext()) {
 					String label = (String) iterator.next();
 					gc.drawBytes(label.getBytes(), 0, label.length(), left+3, top+3+fontHeight-fontDescent);
