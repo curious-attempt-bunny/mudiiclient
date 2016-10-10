@@ -1,7 +1,11 @@
 package gui3.text;
 
+import domain.Configuration;
+import gui3.ColourHelper;
+import gui3.FontConsumer;
 import io.listener.CodeListener;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -10,17 +14,27 @@ import java.util.Vector;
 
 import backend2.OutputListener;
 import domain.Style;
+import io.protocol.impl.BasicANSIProtocolHandler;
+import io.protocol.impl.BasicMudClientModeStyle;
 
-public class SnoopHandler implements OutputListener, CodeListener {
-	private List outputListeners;
+import javax.swing.*;
+
+public class SnoopHandler implements OutputListener, CodeListener, FontConsumer {
+	private Map mapPrefixToListeners = new HashMap();
 	private Map mapIdToPrefix;
 	private int nesting;
 	private List prefixListeners;
 	private TextAreaDocumentPrefix nextPrefix;
 	private boolean isNextPrefix;
-	
+	private String currentPrefix;
+	private Configuration configuration;
+	private ColourHelper colourHelper;
+	private Font font;
+	private BasicMudClientModeStyle mudClientModeStyle;
+	private BasicANSIProtocolHandler ansiProtocolHandler;
+
 	public SnoopHandler() {
-		outputListeners = new Vector();
+		mapPrefixToListeners.put(null, new Vector());
 		prefixListeners = new Vector();
 		mapIdToPrefix = new HashMap();
 		nesting = 0;
@@ -28,7 +42,7 @@ public class SnoopHandler implements OutputListener, CodeListener {
 	}
 
 	public void onOutputEnd() {
-		Iterator it = outputListeners.iterator();
+		Iterator it = ((List)mapPrefixToListeners.get(currentPrefix)).iterator();
 		while (it.hasNext()) {
 			OutputListener outputListener = (OutputListener) it.next();
 			outputListener.onOutputEnd();
@@ -36,7 +50,7 @@ public class SnoopHandler implements OutputListener, CodeListener {
 	}
 
 	public void onOutputStart() {
-		Iterator it = outputListeners.iterator();
+		Iterator it = ((List)mapPrefixToListeners.get(currentPrefix)).iterator();
 		while (it.hasNext()) {
 			OutputListener outputListener = (OutputListener) it.next();
 			outputListener.onOutputStart();
@@ -50,7 +64,7 @@ public class SnoopHandler implements OutputListener, CodeListener {
 			isNextPrefix = false;
 		}
 		
-		Iterator it = outputListeners.iterator();
+		Iterator it = ((List)mapPrefixToListeners.get(currentPrefix)).iterator();
 		while (it.hasNext()) {
 			OutputListener outputListener = (OutputListener) it.next();
 			outputListener.onOutput(text);
@@ -96,13 +110,60 @@ public class SnoopHandler implements OutputListener, CodeListener {
 			PrefixListener prefixListener = (PrefixListener) it.next();
 			prefixListener.onPrefix(areaDocumentPrefix);
 		}
+		if (areaDocumentPrefix == null) {
+			currentPrefix = null;
+		} else {
+			currentPrefix = areaDocumentPrefix.text;
+			if (!mapPrefixToListeners.containsKey(currentPrefix)) {
+				Vector listeners = new Vector();
+				TextAreaWrapper textAreaWrapper = new TextAreaWrapper();
+				textAreaWrapper.setDocument(new BetterTextAreaDocument());
+				textAreaWrapper.setConfiguration(configuration);
+				textAreaWrapper.setColourHelper(colourHelper);
+				textAreaWrapper.init();
+				textAreaWrapper.setFont(font);
+				ansiProtocolHandler.addStyleListener(textAreaWrapper);
+				mudClientModeStyle.addStyleListener(textAreaWrapper);
+				listeners.add(textAreaWrapper);
+				mapPrefixToListeners.put(currentPrefix, listeners);
+				JFrame frame = new JFrame();
+				frame.getContentPane().add(textAreaWrapper.getComponent());
+				int x = configuration.getInt("x", 0);
+				int y = configuration.getInt("y", 0);
+				int width = configuration.getInt("sizeX", 1000);
+				int height = configuration.getInt("sizeY", 700);
+				frame.setLocation(x + (width / 2), y);
+				frame.setSize(width / 2, height);
+				frame.show();
+			}
+		}
 	}
 
 	public void addOutputListener(OutputListener outputListener) {
-		outputListeners.add(outputListener);
+		((List)mapPrefixToListeners.get(null)).add(outputListener);
 	}
 	
 	public void addPrefixListener(PrefixListener prefixListener) {
 		prefixListeners.add(prefixListener);
+	}
+
+	public void setConfiguration(Configuration configuration) {
+		this.configuration = configuration;
+	}
+
+	public void setColourHelper(ColourHelper colourHelper) {
+		this.colourHelper = colourHelper;
+	}
+
+	public void setFont(Font font) {
+		this.font = font;
+	}
+
+	public void setMudClientModeStyle(BasicMudClientModeStyle mudClientModeStyle) {
+		this.mudClientModeStyle = mudClientModeStyle;
+	}
+
+	public void setAnsiProtocolHandler(BasicANSIProtocolHandler ansiProtocolHandler) {
+		this.ansiProtocolHandler = ansiProtocolHandler;
 	}
 }

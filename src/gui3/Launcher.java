@@ -269,6 +269,11 @@ public class Launcher {
 		mudClientModeStyle.addStyleListener(mainText);
 		fontManager.addFontConsumer(mainText);
 		snoopHandler.addPrefixListener(mainText);
+		fontManager.addFontConsumer(snoopHandler);
+		snoopHandler.setConfiguration(configuration);
+		snoopHandler.setColourHelper(colourHelper);
+		snoopHandler.setMudClientModeStyle(mudClientModeStyle);
+		snoopHandler.setAnsiProtocolHandler(ansiProtocolHandler);
 		state.addStateListener(mainText);
 		mainText.setConfiguration(configuration);
 		
