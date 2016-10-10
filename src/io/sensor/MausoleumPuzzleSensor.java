@@ -47,10 +47,13 @@ public class MausoleumPuzzleSensor implements CommandSender {
         lineDetector.addPatternMatcherAndHandler("You hear a%W, as the entrance to the %d tomb swings aside.", new ElementHandler() {
             public void processElement(String element, String[] parts) {
                 String token = (String) mapDirToToken.get(parts[1]);
-                if (token != null && mapDirToTrigger.get(token) != null && lastCommand != null) {
+                if (token != null && mapDirToTrigger.get(token) != null && lastCommand != null && lastCommand.length()>=3 && (lastCommand.contains("\"") || lastCommand.contains("'"))) {
 //                    System.out.println("opened " + parts[1] + " with " + lastCommand);
-                    configuration.setSetting("trigger|" + mapDirToTrigger.get(token), "op " + token + "|" + lastCommand);
-                    commandTransformer.init();
+                    String key = "trigger|" + mapDirToTrigger.get(token);
+                    if (configuration.getSetting(key) == null) {
+                        configuration.setSetting(key, "op " + token + "|" + lastCommand);
+                        commandTransformer.init();
+                    }
                 }
             }
         });

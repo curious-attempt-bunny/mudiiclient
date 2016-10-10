@@ -277,14 +277,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RobustTextAreaView.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="RobustTextAreaView.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/gui3/text/RobustTextAreaView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.48231512">
-              <caret line="138" column="70" selection-start-line="138" selection-start-column="70" selection-end-line="138" selection-end-column="70" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="130" column="22" selection-start-line="130" selection-start-column="20" selection-end-line="130" selection-end-column="22" />
               <folding>
                 <element signature="e#1901#1902#0" expanded="true" />
                 <element signature="e#1942#1943#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MausoleumPuzzleSensor.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/io/sensor/MausoleumPuzzleSensor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.5546624">
+              <caret line="49" column="120" selection-start-line="49" selection-start-column="120" selection-end-line="49" selection-end-column="120" />
+              <folding>
+                <element signature="e#1602#2385#0" expanded="true" />
+                <element signature="e#2384#2385#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -294,7 +307,7 @@
         <entry file="file://$PROJECT_DIR$/config.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="4" column="45" selection-start-line="4" selection-start-column="45" selection-end-line="4" selection-end-column="45" />
+              <caret line="14" column="32" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -385,7 +398,6 @@
         <option value="$PROJECT_DIR$/config.txt.backup" />
         <option value="$PROJECT_DIR$/2015-09-12-11-35-55.html" />
         <option value="$PROJECT_DIR$/src/io/element/PatternMatcher.java" />
-        <option value="$PROJECT_DIR$/src/io/sensor/MausoleumPuzzleSensor.java" />
         <option value="$PROJECT_DIR$/2015-09-19-10-41-04.html" />
         <option value="$PROJECT_DIR$/src/backend2/HtmlLogger.java" />
         <option value="$PROJECT_DIR$/src/gui3/layout/LoginWindowLayout.java" />
@@ -421,6 +433,7 @@
         <option value="$PROJECT_DIR$/config.txt" />
         <option value="$PROJECT_DIR$/test/backend2/TypoCorrectorTest.java" />
         <option value="$PROJECT_DIR$/src/gui3/text/RobustTextAreaView.java" />
+        <option value="$PROJECT_DIR$/src/io/sensor/MausoleumPuzzleSensor.java" />
       </list>
     </option>
   </component>
@@ -701,7 +714,7 @@
       <recent name="io.sensor" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.mudii.co.uk">
+  <component name="RunManager" selected="Application.localhost">
     <configuration default="false" name="RobustInputOutputTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -890,9 +903,25 @@
       <envs />
       <method />
     </configuration>
-    <list size="2">
+    <configuration default="false" name="localhost" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" value="gui3.Launcher" />
+      <option name="VM_PARAMETERS" value="-Dhost=192.168.33.10" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" value="" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="mudiiclient" />
+      <envs />
+      <method />
+    </configuration>
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="Application.mudii.co.uk" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.RobustInputOutputTest" />
+      <item index="1" class="java.lang.String" itemvalue="Application.localhost" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.RobustInputOutputTest" />
     </list>
     <recent_temporary>
       <list size="1">
@@ -1590,7 +1619,7 @@
     <entry file="file://$PROJECT_DIR$/config.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="4" column="45" selection-start-line="4" selection-start-column="45" selection-end-line="4" selection-end-column="45" />
+          <caret line="14" column="32" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
           <folding />
         </state>
       </provider>
@@ -1605,11 +1634,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/gui3/text/RobustTextAreaView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48231512">
-          <caret line="138" column="70" selection-start-line="138" selection-start-column="70" selection-end-line="138" selection-end-column="70" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="130" column="22" selection-start-line="130" selection-start-column="20" selection-end-line="130" selection-end-column="22" />
           <folding>
             <element signature="e#1901#1902#0" expanded="true" />
             <element signature="e#1942#1943#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/sensor/MausoleumPuzzleSensor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5546624">
+          <caret line="49" column="120" selection-start-line="49" selection-start-column="120" selection-end-line="49" selection-end-column="120" />
+          <folding>
+            <element signature="e#1602#2385#0" expanded="true" />
+            <element signature="e#2384#2385#0" expanded="true" />
           </folding>
         </state>
       </provider>
