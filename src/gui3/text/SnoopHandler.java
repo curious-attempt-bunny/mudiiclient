@@ -1,7 +1,9 @@
 package gui3.text;
 
 import domain.Configuration;
+import gui3.CenterPanel;
 import gui3.ColourHelper;
+import gui3.ComponentWrapper;
 import gui3.FontConsumer;
 import io.listener.CodeListener;
 
@@ -116,18 +118,63 @@ public class SnoopHandler implements OutputListener, CodeListener, FontConsumer 
 			currentPrefix = areaDocumentPrefix.text;
 			if (!mapPrefixToListeners.containsKey(currentPrefix)) {
 				Vector listeners = new Vector();
+
+				final JFrame frame = new JFrame();
+
+				BetterTextAreaDocument textDocument = new BetterTextAreaDocument();
+
 				TextAreaWrapper textAreaWrapper = new TextAreaWrapper();
-				textAreaWrapper.setDocument(new BetterTextAreaDocument());
+				textAreaWrapper.setDocument(textDocument);
 				textAreaWrapper.setConfiguration(configuration);
 				textAreaWrapper.setColourHelper(colourHelper);
-				textAreaWrapper.init();
-				textAreaWrapper.setFont(font);
 				ansiProtocolHandler.addStyleListener(textAreaWrapper);
 				mudClientModeStyle.addStyleListener(textAreaWrapper);
+
+				CenterPanel centerPanel = new CenterPanel();
+
+				TextAreaWrapper scrollback = new TextAreaWrapper();
+				ScrollbarWrapper scrollbarWrapper = new ScrollbarWrapper();
+				ScrollbackController scrollbackController = new ScrollbackController();
+				scrollback.setScrollbackController(scrollbackController);
+				textAreaWrapper.setScrollbackController(scrollbackController);
+				scrollback.setScrollback(true);
+				scrollback.setDocument(textDocument);
+				scrollback.setColourHelper(colourHelper);
+				scrollback.setConfiguration(configuration);
+				scrollbackController.setCenterPanel(centerPanel);
+				scrollbackController.setEnabled(false);
+				scrollbackController.setScrollback(scrollback);
+				scrollbackController.setScrollbarWrapper(scrollbarWrapper);
+				scrollbarWrapper.setScrollback(scrollback);
+				scrollbarWrapper.setScrollbackController(scrollbackController);
+
+				centerPanel.setParent(new ComponentWrapper() {
+					public void init() {
+
+					}
+
+					public Component getComponent() {
+						return frame;
+					}
+				});
+				centerPanel.setScrollback(scrollback);
+				centerPanel.setMainText(textAreaWrapper);
+
+				textAreaWrapper.init();
+				textAreaWrapper.setFont(font);
+				scrollback.init();
+				scrollback.setFont(font);
+				scrollbackController.init();
+				scrollbarWrapper.init();
+				centerPanel.init();
+
+
+
+
 				listeners.add(textAreaWrapper);
 				mapPrefixToListeners.put(currentPrefix, listeners);
-				JFrame frame = new JFrame();
-				frame.getContentPane().add(textAreaWrapper.getComponent());
+
+				frame.getContentPane().add(centerPanel.getComponent());
 				int x = configuration.getInt("x", 0);
 				int y = configuration.getInt("y", 0);
 				int width = configuration.getInt("sizeX", 1000);
