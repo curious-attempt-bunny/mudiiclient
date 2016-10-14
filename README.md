@@ -21,3 +21,15 @@ e.g. in Windows:
 Assuming you have the JDK installed and ant then you can run:
 
     ant jar
+
+## Using IntelliJ IDEA
+
+Ensure you add the data directory as a resource folder.
+
+* "Project Structure" menu
+* "Modules" navigation menu
+* "mudiiclient" module
+* "sources" tab
+* "data" folder
+* Mark as "Resources"
+* "OK"
