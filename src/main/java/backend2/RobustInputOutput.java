@@ -51,7 +51,7 @@ public class RobustInputOutput implements InputOutput, StateListener {
 		fireOutput("connecting...\r");
 		
 		try {
-			socket = new Socket(host, 23);
+			socket = new Socket(host, getPortForHost());
 			outputStream = socket.getOutputStream();
 			inputStream = socket.getInputStream();
 			isConnected = true;
@@ -69,6 +69,16 @@ public class RobustInputOutput implements InputOutput, StateListener {
 			}).start();
 			
 			runWrite();
+		}
+	}
+
+	private int getPortForHost() {
+		if (host.equals("mud2.com")) {
+			return 27723;
+		} else if (host.equals("localhost") || host.equals("127.0.0.1")) {
+			return 4023;
+		} else {
+			return 23;
 		}
 	}
 

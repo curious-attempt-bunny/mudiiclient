@@ -34,7 +34,7 @@ import domain.State;
 
 
 public class Launcher {
-	public static final String VERSION = "v1.6.2";
+	public static final String VERSION = "v1.6.3";
 	
 	private LoginWindowLayout loginWindowLayout;
 	private MainWindowWrapper mainFrame;
@@ -142,7 +142,11 @@ public class Launcher {
 
 		// ------- setters
 
-		host = System.getProperty("host", "mudii.co.uk");
+		host = System.getenv("MUD2_HOST");
+		if (host == null) {
+			host = System.getProperty("host", "mudii.co.uk"); // for backwards compatibility
+		}
+
 		io.setHost(host);
 		io.setTelnetProtocolHandler(telnetProtocolHandler);
 		io.setMudClientFilter(mudClientFilter);
@@ -313,7 +317,7 @@ public class Launcher {
 		
 		loginWrapper.setLoginHandler(loginHandler);
 		loginWrapper.setGameWindowLayout(gameWindowLayout);
-		loginWrapper.setHost(System.getProperty("host", "mudii.co.uk"));
+		loginWrapper.setHost(host);
 		loginWrapper.setConfiguration(configuration);
 		
 		focusRetargetter0.setFrom(mainFrame);

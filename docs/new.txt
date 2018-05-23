@@ -1,3 +1,9 @@
+v1.6.3
+
+Support MUD2_HOST as an environment variable to allow using the client for mud2.com.
+Use the correct telnet port for mud2.com (it's now 27723).
+Bug fix: login dialog does not require an accountId or password to login as mudguest.
+
 v1.6.2
 
 Switched from mediocre Java font to Courier in bold (when available).

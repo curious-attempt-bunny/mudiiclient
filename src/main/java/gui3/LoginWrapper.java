@@ -334,11 +334,11 @@ public class LoginWrapper implements ComponentWrapper {
 
 		String sysUser = getSystemUser();
 
-		if (accountUser.getText().length() < 9) {
+		if (!sysUser.equals("mudguest") && accountUser.getText().length() < 9) {
 			highlightComponent(accountUser, true);
 			accountUser.requestFocus();
 			isFailed = true;
-		} else if (accountPassword.getPassword().length == 0) {
+		} else if (!sysUser.equals("mudguest") && accountPassword.getPassword().length == 0) {
 			highlightComponent(accountPassword, true);
 			accountPassword.requestFocus();
 			isFailed = true;
