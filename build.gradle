@@ -1,0 +1,24 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+mainClassName = 'gui3.Launcher'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // such ancient dependencies!
+    testCompile files('lib/test/junit.jar')
+    testCompile files('lib/test/jmock-1.1.0.jar')
+}
+
+jar {
+  manifest {
+    attributes(
+      'Main-Class': 'gui3.Launcher'
+    )
+  }
+}
+

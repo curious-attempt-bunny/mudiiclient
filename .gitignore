@@ -3,3 +3,7 @@ build
 *.html
 config.txt*
 out
+.gradle
+mudiiclient.ipr
+mudiiclient.iws
+mudiiclient.iml
