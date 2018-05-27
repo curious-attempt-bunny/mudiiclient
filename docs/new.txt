@@ -1,3 +1,7 @@
+v1.6.4
+
+Better support Windows OS by sniffing out the best place to store the mudiiclient config. Preferring %HOME%\Documents\.mudiiclient.config.xml.
+
 v1.6.3
 
 Support MUD2_HOST as an environment variable to allow using the client for mud2.com.
