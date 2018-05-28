@@ -1,6 +1,7 @@
 v1.6.4
 
 Better support Windows OS by sniffing out the best place to store the mudiiclient config. Preferring %HOME%\Documents\.mudiiclient.config.xml.
+Store log files in a Mud2Logs directory. You can configure this by manually editing the "log.directory" config file setting.
 
 v1.6.3
 

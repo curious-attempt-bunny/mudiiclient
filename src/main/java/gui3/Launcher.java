@@ -16,6 +16,7 @@ import io.protocol.impl.BasicTextSanitizer;
 import io.protocol.impl.BetterMudClientProtocolHandler;
 import io.sensor.*;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -202,7 +203,17 @@ public class Launcher {
 		
 		if (configuration.getInt(Configuration.KEY_LOGGING, Configuration.DEFAULT_LOGGING) == 1) {
 			String date = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
-			logger.setFilename(date+"-"+host+".html");
+			String logDirectory = configuration.getSetting(Configuration.KEY_LOG_DIRECTORY, configuration.getDefaultLogDirectory());
+			String filename = date + "-" + host + ".html";
+			if (logDirectory.isEmpty()) {
+				logger.setFilename(filename);
+			} else {
+				File logDir = new File(logDirectory);
+				if (!logDir.exists()) {
+					logDir.mkdirs();
+				}
+				logger.setFilename(logDirectory + File.separator + filename);
+			}
 			logger.setColourHelper(colourHelper);
 			mudClientFilter.addTextListener(logger);
 			mudClientFilter.addCodeListener(logger);

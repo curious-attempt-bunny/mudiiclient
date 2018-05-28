@@ -18,6 +18,7 @@ public class Configuration {
 	public static final String KEY_MAX_WIDTH_80 = "max.width.80";
 	public static final String KEY_INVERT_MOUSE_WHEEL_SCROLLING = "mouse.wheel.inverted";
 	public static final String KEY_AUTO_PLAY = "auto.play";
+	public static final String KEY_LOG_DIRECTORY = "log.directory";
 
 	public static final int DEFAULT_ENTER_RESENDS = 1;
 	public static final int DEFAULT_COMMAND_REMAINS = 0;
@@ -35,6 +36,9 @@ public class Configuration {
 		String value = (String) properties.get(key);
 		if (value == null) {
 			value = defaultValue;
+			if (defaultValue != null) {
+				setSetting(key, defaultValue);
+			}
 		}
 		
 		return value;
@@ -119,6 +123,12 @@ public class Configuration {
 		} else {
 			return legacyFile;
 		}
+	}
+
+	public String getDefaultLogDirectory() {
+		String parent = getFile().getParent();
+		String parentPath = parent == null || parent.isEmpty() ? "" : parent + File.separator;
+		return parentPath + "Mud2Logs";
 	}
 
 	public int getInt(String key, int defaultValue) {
