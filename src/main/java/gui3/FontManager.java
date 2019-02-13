@@ -1,12 +1,15 @@
 package gui3;
 
+import domain.Configuration;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-
-import domain.Configuration;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class FontManager {
 
@@ -94,16 +97,32 @@ public class FontManager {
 	}
 
 	public List getFontNames() {
+		final Toolkit toolkit = Toolkit.getDefaultToolkit();
 		List fontNames = new ArrayList();
-		Font[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+		final Font[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
+		final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 		for(int i=0; i<fonts.length; i++) {
-			Font font = fonts[i];
-			FontMetrics fontMetrics = Toolkit.getDefaultToolkit().getFontMetrics(new Font(font.getName(), Font.PLAIN, 48));
-			if (fontMetrics.charWidth('m') == fontMetrics.charWidth('i')) {
-//				System.out.println(font.getName() + ": A(" + fontMetrics.charWidth('A') + ") m(" + fontMetrics.charWidth('m') + ") i(" + fontMetrics.charWidth('i') + ")");
-				fontNames.add(font.getName());
-			}
+			final int index = i;
+			executor.execute(new Runnable() {
+				@Override
+				public void run() {
+					Font font = fonts[index];
+
+					FontMetrics fontMetrics = toolkit.getFontMetrics(new Font(font.getName(), Font.PLAIN, 48));
+					if (fontMetrics.charWidth('m') == fontMetrics.charWidth('i')) {
+//						System.out.println(font.getName() + ": A(" + fontMetrics.charWidth('A') + ") m(" + fontMetrics.charWidth('m') + ") i(" + fontMetrics.charWidth('i') + ")");
+						fontNames.add(font.getName());
+					}
+				}
+			});
+		}
+		executor.shutdown();
+
+		try {
+			executor.awaitTermination(10, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			// Don't allow font testing to proceed longer than necessary
 		}
 
 		return fontNames;
